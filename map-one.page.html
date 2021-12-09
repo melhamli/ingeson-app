@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios" color="dark" defaultHref="travel-home"></ion-back-button>
+    </ion-buttons>
+    <ion-title  color="dark"class="main-header4">MAP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!--*********** Map wrapper  ***********-->
+
+  <div id="wrapper">
+    <!--*********** Map  ***********x-->
+    <div #map id="map"></div>
+
+    <!--*********** Detail box ***********-->
+
+    <div *ngIf="viewDetail" class="place-detail effect6">
+  
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img src="{{placeImage}}" />
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{placeName}}</h2>
+              <p>
+                <ion-icon
+                  style="font-size: 14px !important;"
+                  color="warning"
+                  *ngFor="let i of [0,1,2,3,4]"
+                  [name]="i < placeRating? 'star' : 'star-outline'"
+                >
+                </ion-icon>
+              </p>
+              <p>{{placeDescription}}</p>
+              <ion-button fill="outline" slot="end" color="yellow" (click)="openDetail('placeId')">More detail</ion-button>
+            </ion-label>
+            
+          </ion-item>
+
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar class="ion-no-border" color="lightgray">
+    <ion-tab-button href="travel-home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>home</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="map-one">
+      <ion-icon name="navigate-circle-outline"></ion-icon>
+      <ion-label>Map</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="fire-profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>Mon compte</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
