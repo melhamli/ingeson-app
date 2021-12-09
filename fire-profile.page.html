@@ -1,10 +1,13 @@
 
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios" color="light" defaultHref="travel-home"></ion-back-button>
+    </ion-buttons>
       <ion-buttons slot="end">
-          <ion-menu-button color="dark" auto-hide="false"></ion-menu-button>
+          <ion-menu-button color="light" auto-hide="false"></ion-menu-button>
       </ion-buttons>
-      <ion-title color="dark" lass="main-header4">PROFIL</ion-title>
+      <ion-title color="light" lass="main-header4">PROFIL</ion-title>
       <!-- <ion-buttons slot="start">
           <ion-back-button color="orange"></ion-back-button>
       </ion-buttons> -->
@@ -115,7 +118,7 @@
           </ion-button>
           <ion-text color="dark">
             <h2  class="ion-text-center ion-margin-bottom main-header8">
-                En cliquant sur Se déconnecter vous acceptez les termes et conditions suivantes.
+                En cliquant sur "se déconnecter" vous acceptez les termes et conditions suivantes.
             </h2>
         </ion-text>
     </form>
@@ -126,3 +129,20 @@
     </div>
   </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-tab-bar class="ion-no-border" color="lightgray">
+    <ion-tab-button href="travel-home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>home</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="map-one">
+      <ion-icon name="navigate-circle-outline"></ion-icon>
+      <ion-label>Map</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="fire-profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>Mon compte</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
