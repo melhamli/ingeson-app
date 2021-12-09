@@ -57,47 +57,40 @@ export class AppComponent {
   //********** UI layout pages **********//
   //*************************************//
   layoutPages = [
-    {
-      title: 'Profile',
-      url: 'fire-profile',
-      icon: 'flame'
-      //title: 'Restaurant',
-      //url: '/food-home',
+   // {
+    //  title: 'Restaurant',
+     // url: '/food-home',
       //icon: 'restaurant'
+    //},
+    {
+      title: 'home',
+      url: '/shopping-home',
+      icon: 'home'
     },
     {
-      title: 'Reservations',
-      url: '',
-      icon: 'grid'
-      //title: 'Shopping',
-      //url: '/shopping-home',
-      //icon: 'cart'
+      title: 'inscription',
+      url: '/inscription',
+      icon: 'log-in'
     },
     {
-      title: 'Favoris',
-      url: 'feed',
-      icon: 'newspaper'
-      //title: 'Travel',
-      //url: '/travel-home',
-      //icon: 'trail-sign'
+      title: 'Réservation',
+      url: '/travel-home',
+      icon: 'trail-sign'
     },
-    {
-      title: 'Parametres',
-      url: 'masonry',
-      icon: 'grid'
+    //{
       //title: 'Real estate',
       //url: 'real-home',
       //icon: 'home'
-    },
+    //},
     // {
     //   title: 'E-learning',
     //   url: '/app/tabs/map',
     //   icon: 'business'
     // },
     {
-      title: 'Podcast | Radio station',
+      title: 'FAQ',
       url: 'radio-list',
-      icon: 'radio'
+      icon: 'help'
     },
   //***************************************//
     // {
@@ -110,69 +103,69 @@ export class AppComponent {
     //   url: '/app/tabs/about',
     //   icon: 'chatbox'
     // },
-    {
-      title: 'Chart',
-      url: 'chart',
-      icon: 'podium'
-    },
+    //{
+    //  title: 'Chart',
+    //  url: 'chart',
+    //  icon: 'podium'
+    //},
 
   //***************************************//
 
 
+   // {
+    //  title: 'Image gallery',
+     // url: 'image-gallery',
+      //icon: 'images'
+    //},
     {
-      title: 'Image gallery',
-      url: 'image-gallery',
-      icon: 'images'
-    },
-    {
-      title: 'Feed',
+      title: 'Favoris',
       url: 'feed',
-      icon: 'newspaper'
+      icon: 'star'
     },
-    {
-      title: 'Walkthrough',
-      url: 'walkthrough',
-      icon: 'walk'
-    },
-    {
-      title: 'Form',
-      url: 'form-home',
-      icon: 'create'
-    },
-    {
-      title: 'Masonry',
-      url: 'masonry',
-      icon: 'grid'
-    },
+   // {
+    //  title: 'Walkthrough',
+    //  url: 'walkthrough',
+    //  icon: 'walk'
+    //},
+    ///{
+     // title: 'Form',
+     // url: 'form-home',
+      //icon: 'create'
+    //},
+    // {
+    //  title: 'Masonry',
+    //  url: 'masonry',
+    //  icon: 'grid'
+    //},
 
   //***************************************//
-  {
-    title: 'Map',
-    url: 'map-home',
-    icon: 'map'
-  },
+  //{
+  //  title: 'Map',
+  //  url: 'map-home',
+  //  icon: 'map'
+ // },
   
 
-  {
-    title: 'Signin',
-    url: 'signin-home',
-    icon: 'log-in'
-  },
-  {
-    title: 'Signup',
-    url: 'signup-home',
-    icon: 'push'
-  },
+ // {
+   // title: 'Signin',
+  //  url: 'signin-home',
+   // icon: 'log-in'
+  //},
+  //{
+   // title: 'Signup',
+   // url: 'signup-home',
+    //icon: 'push'
+  //},
 
   {
-    title: 'Search',
+    title: 'recherche',
     url: 'search',
     icon: 'search'
   },
   {
-    title: 'Empty state',
-    url: 'empty-state',
-    icon: 'sad'
+    title: 'parametres',
+    url: 'parametres',
+    icon: 'build'
   }
   ];
 
