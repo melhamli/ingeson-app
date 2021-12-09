@@ -1,0 +1,245 @@
+<ion-header mode="ios" class="ion-no-border">
+  <ion-toolbar>
+
+        <ion-buttons slot="start" >
+          <ion-menu-button auto-hide="false" color="warning"></ion-menu-button>
+        </ion-buttons>
+  
+        <ion-buttons slot="end">
+
+          <ion-button class="badge-button" routerLink="/shopping-cart" routerDirection="forward">
+            <ion-icon name="cart-outline" color="warning">
+            </ion-icon>
+            <ion-badge class="badge-one" color="danger" *ngIf="cart.length > 0">{{ cart.length }}</ion-badge>
+          </ion-button>
+
+        </ion-buttons>
+
+
+          <ion-buttons slot="end">
+
+            <ion-button class="badge-button" routerLink="/feed" routerDirection="forward">
+              <ion-icon name="star-outline" color="warning">
+              </ion-icon>
+            </ion-button>
+  
+          </ion-buttons>
+
+
+        <ion-buttons slot="end">
+
+          <ion-button class="badge-button" routerLink="/fire-profile" routerDirection="forward">
+            <ion-icon name="person-circle-outline" color="warning">
+            </ion-icon>
+          </ion-button>
+
+        </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<ion-content no-padding>
+
+
+  <ion-header mode="ios" collapse="condense" class="ion-no-border">
+    <ion-toolbar>
+      <ion-grid fixed class="ion-no-padding">
+        <ion-title color="warning" class="main-header2"> home </ion-title>
+      </ion-grid>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-grid fixed class="ion-no-padding">
+          <ion-searchbar mode="ios" placeholder="Search.." (click)="openSearchModal()" search-icon="search-outline">
+          </ion-searchbar>
+        </ion-grid>
+    </ion-toolbar>
+
+    <ion-segment-button value="map" layout="icon-end" routerLink="/map-one" routerDirection="map-one">
+      <ion-icon name="pin"></ion-icon>
+        <ion-label>Map</ion-label>
+      </ion-segment-button>
+  </ion-header>
+
+  <!-- ############################################# Updated #################################################-->
+  <!-- ##  -Fixed attribute tells Ionic’s grid to use the max-width corresponding to the current breakpoint ## -->
+  <!-- ##  -To edit breakpoint go to variables.css and edit --ion-grid-width- : value  ###-->
+  <!-- ####################################################################################################### -->
+  <ion-grid fixed class="ion-no-padding">
+
+      <!--*********** Banner  ***********-->
+      <div class="horizontal-scroll-banner slide-left ">
+        <ion-card tappable class="shop-main-h-card shop-banner " *ngFor="let banner of banners | async" (click)="openSpecialModal(banner.id)" >
+              <div class="shop-banner-bg ion-text-uppercase" [ngStyle]="{'background-image': 'url(' + banner.image+ ')'}" >
+                <div *ngIf="banner.special" class="ribbon">{{banner.special_message}}</div>
+                  <p class="card2-title"> {{banner.name}}</p>                           
+              </div>
+        </ion-card>
+      </div>
+
+      
+      <!--*********** Recommened ***********-->
+     <!----> <ion-item lines="none">
+       <h1 class="main-header5"> recommendation </h1>
+     
+      </ion-item>
+
+      <ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesTwo>
+        <ion-slide *ngFor="let recommended of recommended | async" (click)="openDetail('shopping-detail',recommended.id)"> 
+          <ion-card class="shop-main-h-card shop-card-tall   slide-right">
+            <div *ngIf="recommended.discount" class="ribbon">promotions</div>
+            <div class="shop-div-tall-bg" [ngStyle]="{'background-image': 'url(' + recommended.image+ ')'}"> </div>
+            <!--<div class="ion-margin-top">{{recommended.name}}</div>
+                    <ion-icon  style="font-size: 14px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]" [name]="i < recommended.rating  ? 'star' : 'star-outline'"></ion-icon>
+                    <div class="main-b-header7" color="green">${{recommended.price}}</div> -->
+            <div class="ion-margin-top main-header8" text-wrap>{{recommended.name}}</div>
+            <ion-icon style="font-size: 12px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]"
+              [name]="i < recommended.rating  ? 'star' : 'star-outline'"></ion-icon>
+            <div *ngIf="!recommended.discount" class="main-b-header9">
+              <ion-text color="grey">{{recommended.price | currency}}</ion-text>
+            </div>
+            <div *ngIf="recommended.discount" class="main-b-header9 ">
+              <ion-text color="grey">{{recommended.discount_price | currency}}&nbsp;&nbsp;</ion-text>
+              <ion-text color="lightgrey" class="discount">{{recommended.price | currency}}</ion-text>
+            </div>
+            <!-- <div class="margin-bottom-10"></div> -->
+          </ion-card>
+        </ion-slide>
+      </ion-slides> 
+
+
+     
+
+      <!--*********** Category  ***********-->
+      
+
+       
+
+
+      <ion-slides class="swiper-container slide-left" pager= false [options]="slideOption" #slidesThree>
+        <ion-slide *ngFor="let category of categories | async" (click)="openDetail('shopping-list',category.id)"> 
+              <ion-card  class="shop-main-h-card shop-card-s-wide " >
+                      <div class="shop-card-s-wide-bg ion-text-uppercase" [ngStyle]="{'background-image': 'url(' + category.image+ ')'}">
+                          <h2 class="shop-card-s-wide-title"> {{category.name}}</h2>                           
+                      </div>
+              </ion-card>
+        </ion-slide>
+      </ion-slides>        
+      <div class="margin-bottom-10"></div>
+
+        <!-- <div  class="top-horizontal-scroll  slide-left  "  >
+          <ion-icon class="padding-left-15" *ngFor="let category of categories | async"
+          (click)="openDetail('shopping-list',category.id)" [name]="category.icon" [color]="category.color" slot="icon-only"
+            class="component-icon size50 component-icon-primary" (click)="openMap()"></ion-icon>
+        </div> -->
+
+
+
+
+
+
+
+      <!--*********** Promotion  ***********-->
+      
+
+      <ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesTwo>
+        <ion-slide *ngFor="let promotion of promotions | async" (click)="openDetail('shopping-detail',promotion.id)"> 
+           
+          <ion-card class="shop-main-h-card shop-card-tall slide-right " >
+              
+              <div class="shop-div-tall-bg" [ngStyle]="{'background-image': 'url(' + promotion.image+ ')'}"> 
+                <div *ngIf="promotion.new" class="shopping-tags">New</div>
+              </div>
+              <!-- <div class="ion-margin-top" text-wrap>{{promotion.name}}</div>
+                          <ion-icon  style="font-size: 14px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]" [name]="i < promotion.rating  ? 'star' : 'star-outline'"></ion-icon>
+                          <div class="main-b-header7" color="green">${{promotion.price}}</div> -->
+              <div class="ion-margin-top main-header8" text-wrap>{{promotion.name}}</div>
+
+              <ion-icon style="font-size: 12px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]"
+                [name]="i < promotion.rating  ? 'star' : 'star-outline'">
+              </ion-icon>
+          
+              <div *ngIf="!promotion.discount" class="main-b-header9">
+                <ion-text color="grey">{{promotion.price | currency}}</ion-text>
+              </div>
+              <div *ngIf="promotion.discount" class="main-b-header9 ">
+                <ion-text color="grey">{{promotion.discount_price | currency}}&nbsp;&nbsp;</ion-text>
+                <ion-text color="lightgrey" class="discount">{{promotion.price | currency}}</ion-text>
+              </div>
+            </ion-card>
+        </ion-slide>
+      </ion-slides>
+
+      <!--*********** Group by brand  ***********-->
+      <!-- 
+      <ion-item lines="none">
+        <h1 class="main-header5">Top Brands</h1>
+      </ion-item>
+      <div class="top-horizontal-scroll  slide-left ">
+        <ion-card tappable class="shop-main-h-card shop-card-s-wide " *ngFor="let group of groups | async "
+          (click)="openDetail('shopping-group',group.id)">
+          <div class="card-s-wide-bg ion-text-uppercase" [ngStyle]="{'background-image': 'url(' + group.image+ ')'}">
+            <h2 class="card-s-wide-title"> {{group.name}}</h2> 
+          </div>
+        </ion-card>
+      </div> -->
+      <!-- <div class="footer-box"></div> -->
+  </ion-grid>
+  <ion-content fullscreen={true} color="light">
+
+    <!-- 1. Add horizontal-scroll to div  -->
+    <div class="horizontal-scroll ion-margin-top">
+  
+      <!-- 2. Add horizontal-card to ion-card -->
+      <ion-card class="horizontal-card music-card"
+        *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]">
+  
+        <ion-card-header>
+          <img src="/assets/ingenieur.jpeg" />
+        </ion-card-header>
+  
+        <ion-card-content text-center>
+          <h2>S/O Le Flem</h2>
+          <p>Ingénieur son confirmé</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  
+    <!-- 1. Add horizontal-scroll to div  -->
+    <div class="horizontal-scroll ion-margin-top">
+  
+      <!-- 2. Add horizontal-card to ion-card -->
+      <ion-card class="horizontal-card music-card"
+        *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]">
+  
+        <ion-card-header>
+          <img src="/assets/ingenieur2.jpeg" />
+        </ion-card-header>
+  
+        <ion-card-content text-center>
+          <h2>Koodalad</h2>
+          <p>Ingénieur son débutant</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    
+  </ion-content>
+</ion-content>
+
+<ion-footer>
+  <ion-tab-bar class="ion-no-border" color="lightgray">
+    <ion-tab-button>
+      <ion-icon href="shopping-home" name="home-outline"></ion-icon>
+      <ion-label>home</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="map-one">
+      <ion-icon name="navigate-circle-outline"></ion-icon>
+      <ion-label>Map</ion-label>
+    </ion-tab-button>
+    <ion-tab-button href="fire-profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>Mon compte</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
