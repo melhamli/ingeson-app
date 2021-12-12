@@ -57,41 +57,64 @@ export class AppComponent {
   //********** UI layout pages **********//
   //*************************************//
   layoutPages = [
-   // {
-    //  title: 'Restaurant',
-     // url: '/food-home',
+    { 
+      title: 'Home',
+       url: '/travel-home',
+       icon: 'home'
+     },
+
+     {
+      title: 'Map',
+      url: 'map-one',
+      icon: 'map'
+    },
+
+    {
+      title: 'Reservations',
+      url: '',
+      icon: 'mail'
+      //title: 'Shopping',
+      //url: '/shopping-home',
+      //icon: 'cart'
+    },
+
+    {
+      title: 'Favoris',
+      url: 'feed',
+      icon: 'star'
+     },
+    
+    {
+      title: 'Profil',
+      url: 'fire-profile',
+      icon: 'person'
+      //title: 'Restaurant',
+      //url: '/food-home',
       //icon: 'restaurant'
-    //},
-    {
-      title: 'home',
-      url: '/shopping-home',
-      icon: 'home'
     },
+
     {
-      title: 'inscription',
-      url: '/inscription',
-      icon: 'log-in'
-    },
-    {
-      title: 'Réservation',
-      url: '/travel-home',
-      icon: 'trail-sign'
-    },
+      title: 'Parametres',
+      url: 'masonry',
+      icon: 'settings'
+    },  
+
     //{
       //title: 'Real estate',
       //url: 'real-home',
       //icon: 'home'
     //},
+    
     // {
     //   title: 'E-learning',
     //   url: '/app/tabs/map',
     //   icon: 'business'
     // },
-    {
-      title: 'FAQ',
-      url: 'radio-list',
-      icon: 'help'
-    },
+    //{
+    //  title: 'Podcast | Radio station',
+    //  url: 'radio-list',
+    //  icon: 'radio'
+    //},
   //***************************************//
     // {
     //   title: 'Authentication',
@@ -103,70 +126,64 @@ export class AppComponent {
     //   url: '/app/tabs/about',
     //   icon: 'chatbox'
     // },
-    //{
-    //  title: 'Chart',
-    //  url: 'chart',
-    //  icon: 'podium'
-    //},
+   // {
+   //  title: 'Chart',
+   //   url: 'chart',
+   //   icon: 'podium'
+   // },
 
   //***************************************//
 
 
-   // {
-    //  title: 'Image gallery',
-     // url: 'image-gallery',
-      //icon: 'images'
-    //},
-    {
-      title: 'Favoris',
-      url: 'feed',
-      icon: 'star'
-    },
-   // {
-    //  title: 'Walkthrough',
-    //  url: 'walkthrough',
-    //  icon: 'walk'
-    //},
-    ///{
-     // title: 'Form',
-     // url: 'form-home',
-      //icon: 'create'
-    //},
-    // {
-    //  title: 'Masonry',
-    //  url: 'masonry',
-    //  icon: 'grid'
-    //},
+  //  {
+  //    title: 'Image gallery',
+  //    url: 'image-gallery',
+  //   icon: 'images'
+  //  },
+  //  {
+  //    title: 'Feed',
+  //    url: 'feed',
+  //    icon: 'newspaper'
+  //  },
+  //  {
+  //    title: 'Walkthrough',
+  //    url: 'walkthrough',
+  //    icon: 'walk'
+  //  },
+  //  {
+  //    title: 'Form',
+  //   url: 'form-home',
+  //   icon: 'create'
+  //  },
+  //  {
+  //    title: 'Masonry',
+  //    url: 'masonry',
+  //    icon: 'grid'
+  //  },
 
   //***************************************//
-  //{
-  //  title: 'Map',
-  //  url: 'map-home',
-  //  icon: 'map'
- // },
-  
 
- // {
-   // title: 'Signin',
-  //  url: 'signin-home',
-   // icon: 'log-in'
-  //},
-  //{
-   // title: 'Signup',
-   // url: 'signup-home',
-    //icon: 'push'
-  //},
+// {
+//    title: 'Signin',
+//    url: 'signin-home',
+//    icon: 'log-in'
+//  },
+//  {
+//    title: 'Signup',
+//   url: 'signup-home',
+//    icon: 'push'
+//  },
 
-  {
-    title: 'recherche',
-    url: 'search',
-    icon: 'search'
-  },
-  {
-    title: 'parametres',
-    url: 'parametres',
-    icon: 'build'
-  }
+//  {
+//    title: 'Search',
+//    url: 'search',
+//    icon: 'search'
+//  },
+//  {
+//    title: 'Empty state',
+//    url: 'empty-state',
+//    icon: 'sad'
+//  }
   ];
 
   //**************************************//
