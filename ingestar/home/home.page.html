@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="black">
 
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="false"></ion-menu-button>
@@ -38,7 +38,7 @@
   <ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
 
     <ion-slide *ngFor="let service of services" (click)="openDetail('list',service.id,service.title)">
-      <ion-card class="food-main-h-card food-card2 slide-left "  >
+      <ion-card class="food-main-h-card food-card2 slide-left shadow"  >
             <div class="food-card2-bg ion-text-uppercase" [ngStyle]="{'background-image': 'url(' + service.image+ ')'}" >
                 <h2 class="card2-title"> {{service.title}}</h2>                           
             </div>
@@ -82,7 +82,7 @@
 
   <ion-slide   *ngFor="let ingeson of ingesons">
     <!--  routerLink="/side-menu/food/tabs/tab1/food-place-detail/{{ingesons.id}}" -->
-      <ion-card class="food-main-h-card food-card1 slide-right "   >
+      <ion-card class="food-main-h-card food-card1 slide-right shadow"   >
           <div class="food-card1-bg"  [ngStyle]="{'background-image': 'url(' + ingeson.userProfile.image+ ')'}" ></div>
           <ion-card-content class="card1-padding">
               <ion-label><ion-text color="black"><h2>{{ingeson.userProfile.firstname}}</h2></ion-text></ion-label>
