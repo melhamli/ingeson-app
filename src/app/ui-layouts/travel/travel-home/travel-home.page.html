@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="medium">
+
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="main-header4">Home</ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button class="badge-button" routerLink="/fire-signin" routerDirection="forward">
+        <ion-icon name="person-circle-outline" color="light">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content fullscreen={true} color="light">
+
+  <!-- 1. Add horizontal-scroll to div  -->
+  <div class="horizontal-scroll ion-margin-top">
+
+    <!-- 2. Add horizontal-card to ion-card -->
+    <ion-card class="horizontal-card music-card"
+      *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]">
+
+      <ion-card-header>
+        <img src="/assets/ingenieur.jpeg" />
+      </ion-card-header>
+
+      <ion-card-content text-center>
+        <h2>S/O Le Flem</h2>
+        <p>Ingénieur son confirmé</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- 1. Add horizontal-scroll to div  -->
+  <div class="horizontal-scroll ion-margin-top">
+
+    <!-- 2. Add horizontal-card to ion-card -->
+    <ion-card class="horizontal-card music-card"
+      *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]">
+
+      <ion-card-header>
+        <img src="/assets/ingenieur2.jpeg" />
+      </ion-card-header>
+
+      <ion-card-content text-center>
+        <h2>Koodalad</h2>
+        <p>Ingénieur son débutant</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+</ion-content>
+
+
+
+

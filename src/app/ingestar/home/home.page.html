@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="main-header4">Home</ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button class="badge-button" routerLink="/fire-signin" routerDirection="forward">
+        <ion-icon name="person-circle-outline" color="light">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="{true}">
+  <div style="display: flex">
+    <ion-searchbar
+      class="searchinge"
+      color=""
+      placeholder="Search by Location, Area or Pin Code.."
+      (click)="openSearchModal()"
+      search-icon="search-outline"
+    >
+    </ion-searchbar>
+    <ion-buttons slot="end" class="mapinge">
+      <ion-button routerLink="/map-one" routerDirection="back">
+        <ion-icon
+          slot="icon-only"
+          size=""
+          name="map-outline"
+          color=""
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+
+  <!--*********** Rechercher par service ***********-->
+  <ion-item lines="none" class="nomarg">
+    <h1 class="main-header5">Rechercher par service</h1>
+  </ion-item>
+  <!-- liste des services prestés  -->
+  <ion-slides
+    class="swiper-container sm-pad"
+    pager="false"
+    [options]="slideOption"
+    #slidesOne
+  >
+    <ion-slide
+      *ngFor="let service of services"
+      (click)="openDetail('list',service.id,service.title)"
+    >
+      <ion-card class="food-main-h-card food-card2 slide-left">
+        <div
+          class="food-card2-bg ion-text-uppercase"
+          [ngStyle]="{'background-image': 'url(' + service.image+ ')'}"
+        >
+          <h2 class="card2-title">{{service.title}}</h2>
+        </div>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+
+  <!--*********** Ingénieurs du son recommandés ***********-->
+  <ion-item lines="none" class="nomarg">
+    <h1 class="main-header5">Ingénieurs du son recommandés</h1>
+  </ion-item>
+
+  <ion-slides
+    class="swiper-container sm-pad"
+    pager="false"
+    [options]="slideOption"
+    #slidesTwo
+  >
+    <ion-slide *ngFor="let recommended of ingesonRecommended">
+      <!--  routerLink="/side-menu/food/tabs/tab1/food-place-detail/{{recommended.id}}" -->
+      <ion-card
+        class="food-main-h-card food-card1 slide-right shadow"
+        (click)="openIngeSonDetail('detail',recommended.userProfile.id)"
+      >
+        <div
+          class="food-card1-bg slideheight"
+          [ngStyle]="{'background-image': 'url(' + recommended.userProfile.image+ ')'}"
+        ></div>
+        <ion-card-content class="card1-padding">
+          <ion-label
+            ><ion-text color="black"
+              ><h2>{{recommended.userProfile.firstname}}</h2></ion-text
+            ></ion-label
+          >
+          <ion-label><h3>{{recommended.adresse}}</h3></ion-label>
+          <ion-row>
+            <ion-col class="ion-text-left">
+              <ion-icon
+                class="review-icon"
+                color="warning"
+                *ngFor="let i of [0,1,2,3,4]"
+                [name]="i < recommended.avg_note  ? 'star' : 'star-outline'"
+              ></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+
+  <!--*********** ingé-sons ***********-->
+  <ion-item lines="none" class="nomarg">
+    <h1 class="main-header5">Ingénieurs du son sur INGE STAR</h1>
+  </ion-item>
+
+  <!-- liste des ingé-sons  -->
+  <ion-grid class="sm-pad-grid">
+    <ion-row wrap>
+      <ion-col
+        tappable
+        size-lg="4"
+        size-md="4"
+        size-sm="6"
+        size="6"
+        class="ion-padding"
+        *ngFor="let ingeson of ingesons"
+      >
+        <ion-card
+          mode="ios"
+          class="food-main-card food-card-tall ion-margin-bottom shadow"
+          (click)="openIngeSonDetail('detail',recommended.userProfile.id)"
+        >
+          <div
+            class="food-card1-bg"
+            [ngStyle]="{'background-image': 'url(' + ingeson.userProfile.image+ ')'}"
+          ></div>
+          <ion-card-content class="card1-padding">
+            <ion-label
+              ><ion-text color="black"
+                ><h2>{{ingeson.userProfile.firstname}}</h2></ion-text
+              ></ion-label
+            >
+            <ion-label><h3>{{ingeson.adresse}}</h3></ion-label>
+            <ion-row>
+              <ion-col class="ion-text-left">
+                <ion-icon
+                  class="review-icon"
+                  color="warning"
+                  *ngFor="let i of [0,1,2,3,4]"
+                  [name]="i < ingeson.avg_note  ? 'star' : 'star-outline'"
+                ></ion-icon
+                ><br />
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

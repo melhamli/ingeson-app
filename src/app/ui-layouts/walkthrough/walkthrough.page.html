@@ -1,0 +1,95 @@
+<!-- 
+
+   <ion-header class="ion-no-border">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button color="dark" (click)="toggleSideMenu()">
+            Skip
+          </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header> -->
+
+
+<ion-content fullscreen="true" class="tutorial-page">
+
+  <ion-header class="ion-no-border" slot="fixed">
+    <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button class="skip-walkthrough-button" fill="clear" href="fire-signin">Passer</ion-button>
+            </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- <ion-slides pager="true" [options]="slideOptsOne" >
+      <ion-slide *ngFor="let s of itemArray.image_slide">
+          <img class="image-slide" [src]="s">
+      </ion-slide>
+  </ion-slides> -->
+
+  <ion-slides pager="true" [options]="slideFlip" #slidesOne>
+    <ion-slide [ngStyle]="{'background-color': white} ">
+      <!-- <ion-toolbar transparent>
+                <ion-buttons end>
+                    <button ion-button menuToggle clear color="light">Skip</button>                                
+                </ion-buttons>
+          </ion-toolbar> -->
+
+      <div class="intro-box">
+        <img src="/assets/icon/icone-inge.png" class="pop-in slide-image" />
+        <h1>Bienvenue</h1>
+        <p><b>Sur Ingé'Star ta tête chercheuse d'ingénieurs son.</b> </p>
+        <div>
+          <ion-button color="dark" fill="clear" size="" (click)="moveToNext(slidesOne)">
+            <ion-icon  slot="end" name="arrow-forward-circle-outline"  size=""></ion-icon>
+            <ion-label slot="start"> Suivant</ion-label>
+          </ion-button>
+        </div>
+      </div>
+
+    </ion-slide>
+    
+    <ion-slide>
+      <div class="intro-box">
+      <img src="assets/chrono.png"/>
+      <h1>Besoins d'un ingénieur sons ?</h1>
+      <p> <b>Trouves-en un en moins de 2 minutes top chrono.</b></p>
+      <div>
+        <ion-button color="dark" fill="clear" size="" (click)="moveToNext(slidesOne)">
+          <ion-icon  slot="end" name="arrow-forward-circle-outline"  size=""></ion-icon>
+          <ion-label slot="start"> Suivant</ion-label>
+        </ion-button>
+      </div>
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="intro-box">
+      <img src="assets/map.jpeg"/>
+      <h1>Facile d'utilisation</h1>
+      <p> <b>Trouve un ingénieur son où tu le désires grâce à la map intégrée sur notre application.</b></p>
+      <div>
+        <ion-button color="dark" fill="clear" size="" (click)="moveToNext(slidesOne)">
+          <ion-icon  slot="end" name="arrow-forward-circle-outline"  size=""></ion-icon>
+          <ion-label slot="start"> Suivant</ion-label>
+        </ion-button>
+      </div>
+      </div>
+    </ion-slide>
+
+    <!-- Last slide -->
+    <ion-slide>
+      <div class="introBox" margin-top>
+        <img
+          src="/assets/team.jpeg"
+          class="slide-image" />
+        <h1>Rejoins la communauté</h1>
+        <p><b>Choisis l'ingénieur son qui te correspond le plus grâce aux notes et commentaires laissés par les autres utilisateurs.</b></p>
+        <ion-button color="dark" class="skip-walkthrough-button" expand="block" href="fire-signin">
+          Je me lance
+        </ion-button>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+</ion-content>

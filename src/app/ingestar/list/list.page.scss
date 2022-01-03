@@ -1,0 +1,52 @@
+/*start custom css */
+.shadow {
+  -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%),
+    0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%) !important;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%),
+    0 1px 5px 0 rgb(0 0 0 / 20%) !important;
+  margin-bottom: 6px !important;
+  border-radius: 8px !important;
+}
+.food-card-tall {
+  height: auto !important;
+  min-height: 250px !important;
+}
+.nomarg {
+  margin-left: -10px !important;
+}
+.sm-pad {
+  padding-left: 7px !important;
+}
+.sm-pad-grid {
+  padding-left: 10px !important;
+}
+.food-card1-bg {
+  border-radius: 0px !important;
+}
+.slideheight {
+  height: 100px !important;
+}
+.ion-padding {
+  padding-top: 5px !important;
+  padding-bottom: 8px !important;
+  padding-left: 0px !important;
+  padding-right: 7px !important;
+}
+
+@media (max-width: 600px) {
+  .review-icon {
+    font-size: 12px !important;
+  }
+}
+@media (min-width: 601px) {
+  .review-icon {
+    font-size: 16px !important;
+  }
+}
+.card1-padding {
+  padding: 7px 5px !important;
+}
+.food-card1 {
+  width: 195px !important;
+}
+/*end custom css */

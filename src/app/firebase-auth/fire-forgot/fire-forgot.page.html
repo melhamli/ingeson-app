@@ -1,0 +1,64 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-menu-button color="dark" auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title color="dark" lass="main-header4">Réinitialiser</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="dark"></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-title slot="start" class="main-header4">Mot de passe oublié</ion-title> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen=true>
+  <ion-grid fixed class="ion-no-padding">
+      <ion-header class="ion-no-border" collapse="condense">
+        <ion-toolbar>
+          <ion-title color="dark" size="large">Réinitialiser</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+
+
+      <form [formGroup]="resetPasswordForm" novalidate>
+        <div class="login-form">
+          <ion-text color="dark">
+            <h2 text-center class="ion-margin-bottom main-header7">
+              Mot de passe oublié
+            </h2>
+          </ion-text>
+          <ion-list class="ion-margin-top">
+            <!-- <ion-item>
+                  <ion-input formControlName="email" type="text" placeholder="email"></ion-input>
+                </ion-item> -->
+            <ion-item class="roundedInput8px margin-bottom-10">
+              <ion-label>
+                <ion-icon name="mail-outline" color="Dark"></ion-icon>
+              </ion-label>
+              <ion-input formControlName="email" type="text" placeholder="email"></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <!-- Error meassage -->
+          <p color="warning" *ngIf="!resetPasswordForm.controls.email.valid && resetPasswordForm.controls.email.touched">
+            <ion-icon name="information-circle-outline"></ion-icon> Ce champ doit contenir au moins 3 caractères!
+          </p>
+
+          <ion-button mode="ios" color="dark" expand="block" [disabled]="!resetPasswordForm.valid"
+            (click)="resetPassword()">
+            Envoyer
+          </ion-button>
+          <ion-button mode="ios" color="dark" expand="block" fill="outline" class="ion-margin-top"
+            routerLink="/fire-signup">
+            Créer un nouveau compte
+          </ion-button>
+          <ion-text color="dark">
+            <h2  class="ion-text-center ion-margin-bottom main-header8">
+                En cliquant sur S'inscrire vous acceptez les termes et conditions suivantes.
+            </h2>
+        </ion-text>
+        </div>
+      </form>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,128 @@
+
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="end">
+            <ion-menu-button color="dark" auto-hide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title color="dark" lass="main-header4">Connexion</ion-title>
+        <!-- <ion-buttons slot="start">
+            <ion-back-button color="orange"></ion-back-button>
+        </ion-buttons> -->
+        <!-- <ion-title slot="start" class="main-header4">Se connecter</ion-title> -->
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content fullscreen=true>
+    <ion-grid fixed class="ion-no-padding">
+        <ion-header  class="ion-no-border" collapse="condense">
+    
+        <ion-toolbar>
+            <ion-title color="dark" size="large">Connexion</ion-title>
+        </ion-toolbar>
+        </ion-header>
+
+
+        <!-- <div class="logo-box">
+        <img src="https://pbs.twimg.com/profile_images/1148952014036054016/xxv7lLvp.jpg" alt="">
+        </div> -->
+        <!-- <ion-item lines="none">
+            <ion-label>
+                <ion-text color="greengrab">
+                    <h1 class="main-header1">Sign in</h1>
+                </ion-text>
+            </ion-label>
+        </ion-item> -->
+
+        <form [formGroup]="loginForm" novalidate>
+            <div class="login-form">
+                <ion-text color="dark">
+                    <h2 text-center class="ion-margin-bottom main-header7">
+                        Connectez-vous pour continuer
+                    </h2>
+                </ion-text>
+                <!--  -->
+                <ion-list class="ion-margin-top ion-padding">
+                    <!-- ############ -->
+                    <ion-item class="roundedInput8px margin-bottom-10">
+                        <ion-label>
+                            <ion-icon name="person-add-outline" color="medium"></ion-icon>
+                        </ion-label>
+                        <ion-input formControlName="username"  type="email" placeholder="Email"></ion-input>
+                    </ion-item>
+                    <!-- ############ -->
+                    <ion-item class="roundedInput8px margin-bottom-10">
+                        <ion-label slot="start" class="margin-right-8">
+                            <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
+                        </ion-label>
+
+                        <ion-input formControlName="password"  type="password" placeholder="Mot de passe" [type]="showPassword ? 'text' : 'password'" clearOnEdit="false">
+                        </ion-input>
+
+                        <!-- ### Show/hide password ### -->
+                        <div (click)="onPasswordToggle()" ion-button fill="clear" size="small">
+                            <ion-icon slot="icon-only" color="medium" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+                        </div>
+                    </ion-item>
+                    
+                    <!-- ############ -->
+                    <span>
+                        <p class="ion-text-right" (click)="forgot()">Mot de passe oublié ?</p>
+                    </span>     
+                
+                    <!-- ############ -->
+
+                    <!-- Error meassage -->
+                    <ion-text color="scarletred">
+                        <p *ngIf="!loginForm.controls.username.valid && loginForm.controls.username.touched">
+                            <ion-icon name="information-circle-outline"></ion-icon> Le pseudo doit contenir au moins 3 caractères!
+                        </p>
+                    </ion-text>
+                    <ion-text color="scarletred">
+                        <p *ngIf="!loginForm.controls.password.valid && loginForm.controls.password.touched">
+                            <ion-icon name="information-circle-outline"></ion-icon> Le mot de passe doit contenir au moins 6 caractères!
+                        </p>
+                    </ion-text>
+
+
+                </ion-list>
+
+
+
+                <!--  -->
+                <!-- <ion-list class="ion-margin-top">
+                    <ion-item lines="none">
+                        <ion-icon slot="start" color="lightgray" size="small" name="mail-outline"></ion-icon>
+                        <ion-input formControlName="username" type="email" placeholder="Username"></ion-input>
+                    </ion-item>
+
+                    <ion-item lines="none">
+                        <ion-icon slot="start" color="lightgray" size="small" name="key-outline"></ion-icon>
+                        <ion-input formControlName="password" type="password" placeholder="Password"></ion-input>
+                    </ion-item>
+
+                </ion-list> -->
+
+
+
+
+                <!-- <ion-button mode="ios" color="orange" expand="block"  (click)="login()">
+                    Sign in
+                </ion-button> -->
+
+                <ion-button mode="ios" color="dark" expand="block" [disabled]="!loginForm.valid" (click)="login()">
+                    Se connecter
+                </ion-button>
+
+                <ion-button mode="ios" color="dark" expand="block" fill="outline" class="ion-margin-top" (click)="register()">
+                    Créer un nouveau compte
+                </ion-button>
+                <ion-text color="medium">
+                    <h2 class="ion-margin-bottom main-header8 ion-text-center">
+                        En cliquant sur "se connecter" vous acceptez les termes et conditions suivantes.
+                    </h2>
+                </ion-text>
+            </div>
+        </form>
+    </ion-grid>
+</ion-content>

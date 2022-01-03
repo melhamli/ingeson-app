@@ -1,0 +1,106 @@
+<ion-content
+  no-padding
+  fullscreen
+  (ionScroll)="onScroll($event)"
+  [scrollEvents]="true"
+  [class.transition]="transition"
+>
+  <ion-header class="ion-no-border" slot="fixed">
+    <ion-toolbar class="first" [class.show-background]="showToolbar">
+      <ion-buttons slot="start">
+        <ion-back-button
+          mode="ios"
+          color="light"
+          defaultHref="#"
+        ></ion-back-button>
+      </ion-buttons>
+
+      <ion-title [class.show-title]="show-title" color="light"
+        >{{(userprofile)?.firstname}}</ion-title
+      >
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid fixed class="ion-no-padding">
+    <!--*********** Image header  ***********-->
+    <div
+      class="detail-header"
+      [ngStyle]="{'background-image': 'url(' + (userprofile)?.image + ')'}"
+    ></div>
+
+    <div class="food_space1">
+      <ion-item lines="none">
+        <ion-label text-wrap>
+          <h1 class="main-b-header2 detail-name">
+            {{(userprofile)?.firstname}} {{(userprofile)?.lastname}}
+          </h1>
+          <p class="margin-left-5 margin-top-0">{{(ingeson)?.adresse}}</p>
+          <ion-icon
+            style="font-size: 18px !important"
+            color="warning"
+            *ngFor="let i of [0,1,2,3,4]"
+            [name]="i < (ingeson)?.avg_note  ? 'star' : 'star-outline'"
+          ></ion-icon>
+        </ion-label>
+        <div slot="end"></div>
+      </ion-item>
+    </div>
+    <!--*********** Description ***********-->
+    <div class="food_space4">
+      <p class="" [innerHtml]="(ingeson)?.about"></p>
+    </div>
+    <!--*********** Services ***********-->
+    <div *ngIf="ingetarifs">
+      <ion-row>
+        <ion-col size="2" style="margin-left: 15px">
+          <h1 class="main-header5">Tarifs</h1>
+        </ion-col>
+        <ion-col>
+          <ul class="size-selector">
+            <li *ngFor="let tarif of ingetarifs">
+              {{tarif.service_name}} ({{tarif.tarif}} {{unit}})
+            </li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="ingereviews">
+      <!--*********** Contact ***********-->
+      <ion-item lines="none">
+        <h1 class="main-header5">Reviews</h1>
+      </ion-item>
+      <ion-item
+        *ngFor="let review of ingereviews"
+        lines="none"
+        style="padding: 0px !important"
+        href="javascript:void(0);"
+      >
+        <ion-avatar slot="start">
+          <img [src]="review.user_from_image" />
+        </ion-avatar>
+        <ion-label>
+          <!-- <h3 class="main-header6">{{(itemDetail | async)?.agentId}}</h3> -->
+          <h3 class="main-header6">{{review.user_from_name}}</h3>
+          <h3 class="main-header6">{{review.message}}</h3>
+          <ion-icon
+            style="font-size: 16px !important"
+            color="warning"
+            *ngFor="let i of [0,1,2,3,4]"
+            [name]="i < review.note  ? 'star' : 'star-outline'"
+          ></ion-icon>
+        </ion-label>
+      </ion-item>
+    </div>
+
+    <ion-footer class="ion-no-border">
+      <ion-toolbar>
+        <ion-grid fixed class="ion-no-padding">
+          <ion-button color="dark" expand="full" (click)="reserver()"
+            >Reserver</ion-button
+          >
+        </ion-grid>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-grid></ion-content
+>

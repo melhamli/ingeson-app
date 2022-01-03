@@ -1,0 +1,122 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        mode="ios"
+        color="light"
+        defaultHref="home"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button color="light" auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title color="light" lass="main-header4">Reservation</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid fixed class="ion-no-padding">
+    <ion-header class="ion-no-border" collapse="condense">
+      <ion-toolbar>
+        <ion-title color="dark" size="large">Reservation</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <!-- <div class="logo-box">
+      <img src="https://pbs.twimg.com/profile_images/1148952014036054016/xxv7lLvp.jpg" alt="">
+    </div> -->
+
+    <div class="login-form">
+      <form [formGroup]="reservationForm" novalidate>
+        <ion-list class="ion-margin-top ion-padding">
+          <!-- ############ -->
+          <ion-item>
+            <ion-label position="stacked"> Service </ion-label>
+            <ion-select
+              formControlName="service"
+              *ngIf="ingetarifs"
+              placeholder="Selectionner le service"
+              (ionChange)="calculateTotal($event)"
+            >
+              <ion-select-option
+                *ngFor="let tarif of ingetarifs"
+                value="{{tarif.service_id}}_{{tarif.tarif}}_{{tarif.service_name}}"
+                >{{tarif.service_name}} ({{tarif.tarif}}
+                {{unit}})</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Date de reservation</ion-label>
+            <ion-datetime
+              formControlName="reservation_date"
+              displayFormat="MM/DD/YYYY"
+              min="1994-03-14"
+              max="2012-12-09"
+            ></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <ion-label position="stacked">Nombre d'heures</ion-label>
+            </ion-label>
+            <ion-input
+              type="number"
+              formControlName="nbhours"
+              (ionChange)="calculateTotal($event)"
+            ></ion-input>
+          </ion-item>
+          <ion-card class="checkout-card">
+            <ion-item lines="none">
+              <h1 class="main-header5">Montant Total</h1>
+            </ion-item>
+            <ion-list>
+              <ion-item lines="none" class="ion-margin-top">
+                <ion-label class="text-left">
+                  <h1 class="main-b-header8">GrandTotal:</h1>
+                </ion-label>
+                <h1 class="main-b-header8" slot="end" text-right>
+                  {{ grandTotal }} {{currency}}
+                </h1>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+
+          <ion-card class="checkout-card">
+            <ion-item lines="none">
+              <h1 class="main-header5">Payment</h1>
+            </ion-item>
+            <ion-radio-group value="cash">
+              <div class="ion-padding-top ion-padding-bottom">
+                <ion-item lines="none">
+                  <ion-radio
+                    slot="start"
+                    mode="md"
+                    color="warning"
+                    value="cash"
+                  ></ion-radio>
+                  <ion-icon
+                    slot="start"
+                    size="small"
+                    name="wallet-outline"
+                  ></ion-icon>
+                  <ion-label>
+                    <h2 class="main-header7">Especes</h2>
+                  </ion-label>
+                </ion-item>
+              </div>
+            </ion-radio-group>
+          </ion-card>
+
+          <ion-button
+            mode="ios"
+            color="dark"
+            expand="block"
+            class="ion-margin-top"
+            (click)="soumettreReservation()"
+          >
+            Soumettre
+          </ion-button>
+        </ion-list>
+      </form>
+    </div>
+  </ion-grid>
+</ion-content>
