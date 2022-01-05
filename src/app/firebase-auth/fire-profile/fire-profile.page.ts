@@ -271,7 +271,7 @@ export class FireProfilePage implements OnInit {
   }
 
   //Telecharger l'image et sauvegarder l'image dans firebase storage
-  uploadImage(event: FileList) {
+  /*uploadImage(event: FileList) {
     const file = event.item(0);
 
     // Image validation
@@ -317,7 +317,7 @@ export class FireProfilePage implements OnInit {
         console.log(error);
       }
     );
-  }
+  }*/
 
   //mettre a jour les donnees sur le profile
   async updateProfile() {
@@ -343,7 +343,7 @@ export class FireProfilePage implements OnInit {
           this.ingeson_id,
           this.updateForm.value.about,
           this.tarifservices,
-          this.imgPath
+          ""
         )
         .then(
           () => {
