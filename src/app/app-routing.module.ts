@@ -40,6 +40,13 @@ const routes: Routes = [
         (m) => m.ReservationFiniePageModule
       ),
   },
+  {
+    path: 'reservation-list',
+    loadChildren: () =>
+      import('./ingestar/reservation-list/reservation-list.module').then(
+        (m) => m.ReservationListPageModule
+      ),
+  },
 
   {
     path: 'search',

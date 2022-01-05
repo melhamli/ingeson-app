@@ -36,6 +36,24 @@
         </h2>
       </ion-text>
       <form [formGroup]="updateForm" novalidate>
+        <!-- File upload progress bar -->
+        <div *ngIf="percentageVal | async as percentage">
+          Progress: {{ percentage | number }}%
+          <ion-progress-bar value="{{ percentage / 100 }}"></ion-progress-bar>
+        </div>
+        <ion-card
+          class="ion-text-center"
+          *ngIf="!isFileUploading && !isFileUploaded"
+        >
+          <ion-card-header>
+            <ion-card-title>Image de profil</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button color="primary" size="medium">
+              <input type="file" (change)="uploadImage($event.target.files)" />
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
         <ion-list class="ion-margin-top ion-padding">
           <!-- ############ -->
           <ion-item class="roundedInput8px margin-bottom-10">
@@ -82,100 +100,68 @@
               [value]="(userDetail | async)?.phone"
             ></ion-input>
           </ion-item>
-
-          <ion-item *ngIf="ingeson?.about">
-            <ion-label>
-              <ion-label position="stacked">About</ion-label>
-            </ion-label>
-            <ion-textarea
-              rows="10"
-              formControlName="about"
-              [value]="ingeson?.about"
-            ></ion-textarea>
-          </ion-item>
-          <!---Afficher les tarifs fixes par l'utilisateur -->
-          <ion-item
-            class="roundedInput8px margin-bottom-10"
-            *ngFor="let tarifservice of tarifservices"
-          >
-            <ion-label>
-              <ion-label position="stacked"
-                >{{tarifservice?.service_name}}</ion-label
-              >
-            </ion-label>
-            <ion-input
-              type="text"
-              [value]="tarifservice?.tarif"
-              (ionInput)="getValue($event, tarifservice?.service_id)"
-            ></ion-input>
-          </ion-item>
+          <ng-container *ngIf="(userDetail | async)?.is_ingeson">
+            <ion-item>
+              <ion-label>
+                <ion-label position="stacked">About</ion-label>
+              </ion-label>
+              <ion-textarea
+                class="roundedInput8px margin-bottom-10"
+                rows="5"
+                formControlName="about"
+                [value]="ingeson?.about"
+              ></ion-textarea>
+            </ion-item>
+            <!---Afficher les tarifs fixes par l'utilisateur -->
+            <ion-item
+              class="roundedInput8px margin-bottom-10"
+              *ngFor="let tarifservice of tarifservices"
+            >
+              <ion-label>
+                <ion-label position="stacked"
+                  >{{tarifservice?.service_name}}</ion-label
+                >
+              </ion-label>
+              <ion-input
+                type="text"
+                [value]="tarifservice?.tarif"
+                (ionInput)="getValue($event, tarifservice?.service_id)"
+              ></ion-input>
+            </ion-item>
+          </ng-container>
         </ion-list>
+        <!--Only for ingeson-->
+        <ng-container *ngIf="(userDetail | async)?.is_ingeson">
+          <ion-item class="roundedInput8px margin-bottom-10">
+            <input
+              type="text"
+              class="native-input sc-ion-input-ios"
+              (keydown.enter)="$event.preventDefault()"
+              placeholder="Search Nearest Location"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="off"
+              type="text"
+              value="{{address}}"
+              #search
+            />
+          </ion-item>
 
-        <input
-          type="text"
-          class="native-input sc-ion-input-ios"
-          (keydown.enter)="$event.preventDefault()"
-          placeholder="Search Nearest Location"
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="off"
-          type="text"
-          value="{{address}}"
-          #search
-        />
-
-        <agm-map
-          [latitude]="latitude"
-          [longitude]="longitude"
-          [zoom]="zoom"
-          #map
-          id="map"
-        >
-          <agm-marker
+          <agm-map
             [latitude]="latitude"
             [longitude]="longitude"
-            [markerDraggable]="true"
-            (dragEnd)="markerDragEnd($event)"
-          ></agm-marker>
-        </agm-map>
-
-        <!-- <ion-list lines="none">
-            <ion-item>
-              <ion-icon slot="start" color="lightgray" size="small" name="mail-outline"></ion-icon>
-              <ion-input type="text"  formControlName="firstname"  [value]="(userDetail | async)?.firstname"></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon slot="start" color="lightgray" size="small" name="mail-outline"></ion-icon>
-                <ion-input type="text"  formControlName="lastname"   [value]="(userDetail | async)?.lastname"></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon slot="start" color="lightgray" size="small" name="mail-outline"></ion-icon>
-                <ion-input type="text"  formControlName="email"  [value]="(userDetail | async)?.email"></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-icon slot="start" color="lightgray" size="small" name="mail-outline"></ion-icon>
-              <ion-input type="text" formControlName="phone"   [value]="(userDetail | async)?.phone"></ion-input>
-            </ion-item>
-
-
-        </ion-list> -->
-
-        <!-- Error meassage -->
-        <!-- <p color="warning" *ngIf="!updateForm.controls.firstname.valid && updateForm.controls.firstname.touched">
-              <ion-icon name="information-circle-outline"></ion-icon> Ce champ doit contenir au moins 3 caractères!
-          </p>
-          <p color="warning" *ngIf="!updateForm.controls.lastname.valid && updateForm.controls.lastname.touched">
-              <ion-icon name="information-circle-outline"></ion-icon> Ce champ doit contenir au moins 3 caractères!
-          </p>
-          <p color="warning" *ngIf="!updateForm.controls.email.valid && updateForm.controls.email.touched">
-            <ion-icon name="information-circle-outline"></ion-icon> Ce champ doit contenir au moins 3 caractères!
-          </p>
-          <p color="warning" *ngIf="!updateForm.controls.phone.valid && updateForm.controls.phone.touched">
-            <ion-icon name="information-circle-outline"></ion-icon> Ce champ doit contenir au moins 3 caractères!
-          </p> -->
+            [zoom]="zoom"
+            #map
+            id="map"
+          >
+            <agm-marker
+              [latitude]="latitude"
+              [longitude]="longitude"
+              [markerDraggable]="true"
+              (dragEnd)="markerDragEnd($event)"
+            ></agm-marker>
+          </agm-map>
+        </ng-container>
 
         <ion-button
           mode="ios"
@@ -186,16 +172,6 @@
         >
           Mettre à jour le profil
         </ion-button>
-        <!--<ion-button
-          mode="ios"
-          color="dark"
-          fill="outline"
-          expand="block"
-          class="ion-margin-top"
-          (click)="logout()"
-        >
-          Se déconnecter
-        </ion-button>-->
         <ion-text color="dark">
           <h2 class="ion-text-center ion-margin-bottom main-header8">
             En cliquant sur "se déconnecter" vous acceptez les termes et

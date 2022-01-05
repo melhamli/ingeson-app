@@ -201,15 +201,43 @@ export class UserService {
       .createUserWithEmailAndPassword(username, password)
       .then((newUser) => {
         console.log('userid=========' + newUser.user.uid); // firebase.database().ref('/userProfile').child(newUser.uid).set({
-        this.firestore.collection('userProfile').doc(newUser.user.uid).set({
-          id: newUser.user.uid,
-          firstname: firstname,
-          lastname: lastname,
-          email: username,
-          image: '',
-          phone: phone,
-          is_ingeson: is_ingeson,
-        });
+        //Creer un document userprofile et un document ingeson si c'est un ingenieur de son
+        //Avec une location par defaut (Bruxelles) pour ne pas rendre le homepage sans info
+        //Avec un image d'icone d'ingestar
+        if (is_ingeson) {
+          this.firestore
+            .collection('userProfile')
+            .doc(newUser.user.uid)
+            .set({
+              id: newUser.user.uid,
+              firstname: firstname,
+              lastname: lastname,
+              email: username,
+              image: '/assets/icon/icone-inge.png',
+              phone: phone,
+              is_ingeson: is_ingeson,
+            })
+            .then((rep) => {
+              this.firestore.collection<any>('ingeson').add({
+                userprofile_id: newUser.user.uid,
+                latitude: '50.85012',
+                longitude: '4.44848',
+                adresse: 'Bruxelles, Belgium',
+                about: '',
+                avg_note: 0.0,
+              });
+            });
+        } else {
+          this.firestore.collection('userProfile').doc(newUser.user.uid).set({
+            id: newUser.user.uid,
+            firstname: firstname,
+            lastname: lastname,
+            email: username,
+            image: '/assets/icon/icone-inge.png',
+            phone: phone,
+            is_ingeson: is_ingeson,
+          });
+        }
       });
   }
 
@@ -256,7 +284,8 @@ export class UserService {
     longitude: string,
     ingeson_id: string,
     about: string,
-    tarifservices: any[]
+    tarifservices: any[],
+    image: string
   ) {
     //1-Enregistrer les champs correspondant a userprofile
     //2-Enregister les champs correspondants a ingeson
@@ -269,6 +298,7 @@ export class UserService {
         lastname: lastname,
         phone: phone,
         email: email,
+        image: image,
       })
       .then((res) => {
         //2-

@@ -15,6 +15,16 @@ import { UserService } from '../../services/user.service';
 import { IngestarService } from '../../services/ingestar.service';
 import { Observable } from 'rxjs';
 import { MapsAPILoader, AgmMap } from '@agm/core';
+//Imort for file upload
+import { finalize, tap } from 'rxjs/operators';
+import {
+  AngularFireStorage,
+  AngularFireUploadTask,
+} from '@angular/fire/storage';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-fire-profile',
@@ -27,6 +37,27 @@ export class FireProfilePage implements OnInit {
   ingeson: any;
   public updateForm: FormGroup;
   public userprofileId: any;
+
+  //mettre a jour l'image: https://www.positronx.io/ionic-firebase-file-image-upload-with-progress-bar-tutorial-with-example/
+  // File upload task
+  fileUploadTask: AngularFireUploadTask;
+
+  // Upload progress
+  percentageVal: Observable<number>;
+
+  // Track file uploading with snapshot
+  trackSnapshot: Observable<any>;
+
+  // Uploaded File URL
+  UploadedImageURL: Observable<string>;
+
+  // Image specifications
+  imgName: string;
+  imgPath: string;
+  // File uploading status
+  isFileUploading: boolean;
+  isFileUploaded: boolean;
+  ////Fin image
 
   latitude: number;
   longitude: number;
@@ -51,7 +82,9 @@ export class FireProfilePage implements OnInit {
     //private modalController: ModalController
     public formBuilder: FormBuilder,
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private afs: AngularFirestore,
+    private afStorage: AngularFireStorage
   ) {
     let EMAIL_REGEXP =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -83,12 +116,48 @@ export class FireProfilePage implements OnInit {
         Validators.compose([Validators.minLength(3), Validators.required]),
       ],
     });
+    this.isFileUploading = false;
+    this.isFileUploaded = false;
   }
 
   ngOnInit() {
     //this.ionicComponentService.presentLoading(); // call loading
-    //load Places Autocomplete
-    //
+
+    //this.getServices();
+    this.userService.getUserProfile().subscribe((res) => {
+      let userProfileId = res.id;
+      this.userprofileId = userProfileId;
+      console.log('test---------------');
+      console.log(userProfileId);
+      if (res.is_ingeson) {
+        this.ingestarService.getIngeson(userProfileId).subscribe((res) => {
+          this.ingeson = res[0];
+          console.log(this.ingeson.about);
+          this.ingeson_id = this.ingeson.id;
+          let about = this.ingeson.about;
+          this.updateForm.patchValue({
+            about: about,
+          });
+          this.latitude = parseFloat(this.ingeson.latitude);
+          this.longitude = parseFloat(this.ingeson.longitude);
+          this.address = this.ingeson.adresse;
+          //load Places Autocomplete
+          this.loadAutocompletePlaces(); // call async / await
+          //Attendre pendant 3s pour que la page soit bien chargee
+          // avant d'afficher le map avec le marker (pour permettre de resoudre le probleme de search
+          //element pas trouve)
+          setTimeout(() => {
+            this.getAddress(this.latitude, this.longitude);
+          }, 3000);
+          this.getTarifs(this.userprofileId);
+        });
+      }
+    });
+    this.ionicComponentService.presentTimeoutLoading(1000, true);
+  }
+  //Activer l'autocomplete des places lorsque l'utilisateur est entrain d'
+  //entrer son addresse
+  loadAutocompletePlaces() {
     this.mapsAPILoader.load().then(() => {
       //this.setCurrentLocation();
       this.geoCoder = new google.maps.Geocoder();
@@ -117,29 +186,7 @@ export class FireProfilePage implements OnInit {
         });
       });
     });
-    //this.getServices();
-    this.userService.getUserProfile().subscribe((res) => {
-      let userProfileId = res.id;
-      this.userprofileId = userProfileId;
-      console.log('test---------------');
-      console.log(userProfileId);
-      this.ingestarService.getIngeson(userProfileId).subscribe((res) => {
-        this.ingeson = res[0];
-        this.ingeson_id = this.ingeson.id;
-        let about = this.ingeson.about;
-        this.updateForm.patchValue({
-          about: about,
-        });
-        this.latitude = parseFloat(this.ingeson.latitude);
-        this.longitude = parseFloat(this.ingeson.longitude);
-        this.address = this.ingeson.adresse;
-        this.getAddress(this.latitude, this.longitude);
-        this.getTarifs(this.userprofileId);
-      });
-    });
-    this.ionicComponentService.presentTimeoutLoading(1000, true);
   }
-
   getServices() {
     this.ingestarService.getServices().subscribe((actionArray) => {
       //console.log("...getCategory="+actionArray);
@@ -223,6 +270,55 @@ export class FireProfilePage implements OnInit {
     this.userDetail = this.userService.getUserProfile();
   }
 
+  //Telecharger l'image et sauvegarder l'image dans firebase storage
+  uploadImage(event: FileList) {
+    const file = event.item(0);
+
+    // Image validation
+    if (file.type.split('/')[0] !== 'image') {
+      console.log('File type is not supported!');
+      return;
+    }
+
+    this.isFileUploading = true;
+    this.isFileUploaded = false;
+
+    this.imgName = file.name;
+    console.log(this.imgName);
+
+    // Storage path
+    const fileStoragePath = `filesStorage/${new Date().getTime()}_${file.name}`;
+    console.log(fileStoragePath);
+
+    // Image reference
+    const imageRef = this.afStorage.ref(fileStoragePath);
+    console.log(imageRef);
+
+    // File upload task
+    this.fileUploadTask = this.afStorage.upload(fileStoragePath, file);
+
+    // Show uploading progress
+    this.percentageVal = this.fileUploadTask.percentageChanges();
+    this.fileUploadTask.then((rep) => {
+      console.log('uploadddddddddddddd');
+      console.log(rep);
+    });
+    // Retreive uploaded image storage path
+    this.UploadedImageURL = imageRef.getDownloadURL();
+    imageRef.getDownloadURL().subscribe(
+      (resp) => {
+        this.imgPath = resp;
+        console.log('=================');
+        console.log(this.imgPath);
+        this.isFileUploading = false;
+        this.isFileUploaded = true;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
   //mettre a jour les donnees sur le profile
   async updateProfile() {
     if (!this.updateForm.valid) {
@@ -235,7 +331,6 @@ export class FireProfilePage implements OnInit {
       this.ionicComponentService.presentLoading();
       let adresse = this.updateForm.value.adresse;
 
-      console.log('YES');
       await this.userService
         .updateUserProfile(
           this.updateForm.value.firstname,
@@ -247,14 +342,13 @@ export class FireProfilePage implements OnInit {
           this.longitude.toString(),
           this.ingeson_id,
           this.updateForm.value.about,
-          this.tarifservices
+          this.tarifservices,
+          this.imgPath
         )
         .then(
           () => {
             this.ionicComponentService.presentToast('Profil mis à jour', 2000);
             this.ionicComponentService.dismissLoading();
-            //this.router.navigateByUrl('fire-profile');
-            //this.nav.setRoot('AfterLoginPage');
           },
           (error) => {
             var errorMessage: string = error.message;
@@ -262,8 +356,6 @@ export class FireProfilePage implements OnInit {
             this.ionicComponentService.presentAlert(errorMessage);
           }
         );
-      //this.firestore.doc('item/'+this.itemId).update(postData);
-      //this.router.navigateByUrl('crud-item');
     }
   }
 }
