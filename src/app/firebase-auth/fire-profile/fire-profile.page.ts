@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  NgZone,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -6,7 +12,9 @@ import { MenuController, NavController } from '@ionic/angular';
 import { IonicComponentService } from '../../services/ionic-component.service';
 
 import { UserService } from '../../services/user.service';
+import { IngestarService } from '../../services/ingestar.service';
 import { Observable } from 'rxjs';
+import { MapsAPILoader, AgmMap } from '@agm/core';
 
 @Component({
   selector: 'app-fire-profile',
@@ -16,16 +24,34 @@ import { Observable } from 'rxjs';
 export class FireProfilePage implements OnInit {
   userAuth: boolean = false; // Is user logged in ?
   userDetail: Observable<any>;
+  ingeson: any;
   public updateForm: FormGroup;
+  public userprofileId: any;
+
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  private geoCoder;
+  ingeson_id: string;
+  public services: any[];
+  public ingetarifs: any[];
+  public tarifservices: any[] = [];
+
+  @ViewChild('search', { static: false })
+  public searchElementRef: ElementRef;
 
   constructor(
     public userService: UserService,
+    public ingestarService: IngestarService,
     public menuCtrl: MenuController,
     private navController: NavController,
     public router: Router,
     private ionicComponentService: IonicComponentService,
     //private modalController: ModalController
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone
   ) {
     let EMAIL_REGEXP =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -52,23 +78,152 @@ export class FireProfilePage implements OnInit {
         '',
         Validators.compose([Validators.minLength(0), Validators.required]),
       ],
+      about: [
+        '',
+        Validators.compose([Validators.minLength(3), Validators.required]),
+      ],
     });
   }
 
   ngOnInit() {
     //this.ionicComponentService.presentLoading(); // call loading
+    //load Places Autocomplete
+    //
+    this.mapsAPILoader.load().then(() => {
+      //this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder();
+
+      let autocomplete = new window['google']['maps']['places']['Autocomplete'](
+        this.searchElementRef.nativeElement,
+        {
+          types: ['address'],
+        }
+      );
+      //Lorsque l'utilisateur tape alors on lance la recherche
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+
+          //set latitude, longitude and zoom
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.zoom = 12;
+        });
+      });
+    });
+    //this.getServices();
+    this.userService.getUserProfile().subscribe((res) => {
+      let userProfileId = res.id;
+      this.userprofileId = userProfileId;
+      console.log('test---------------');
+      console.log(userProfileId);
+      this.ingestarService.getIngeson(userProfileId).subscribe((res) => {
+        this.ingeson = res[0];
+        this.ingeson_id = this.ingeson.id;
+        let about = this.ingeson.about;
+        this.updateForm.patchValue({
+          about: about,
+        });
+        this.latitude = parseFloat(this.ingeson.latitude);
+        this.longitude = parseFloat(this.ingeson.longitude);
+        this.address = this.ingeson.adresse;
+        this.getAddress(this.latitude, this.longitude);
+        this.getTarifs(this.userprofileId);
+      });
+    });
     this.ionicComponentService.presentTimeoutLoading(1000, true);
   }
-  ionViewWillEnter() {
-    this.userDetail = this.userService.getUserProfile();
 
-    //this.userAuth =  await this.userService.isLoggedIn();
-
-    this.userService.getUserProfile().subscribe((res) => {
-      console.log('Get user profile response=' + res);
+  getServices() {
+    this.ingestarService.getServices().subscribe((actionArray) => {
+      //console.log("...getCategory="+actionArray);
+      this.services = actionArray;
     });
   }
 
+  getTarifs(userprofileId) {
+    //Recuperer tous les tarifs fixes par l'utilisateur
+    this.ingestarService.getTarifs(userprofileId).subscribe((actionArray) => {
+      this.ingetarifs = actionArray;
+      console.log('ingetarifs');
+      console.log(this.ingetarifs);
+      //Recuperer tous les services du systeme et faire un loop pour initialiser
+      //pour chaque service le tarif fixe par l utilisateur
+      this.ingestarService.getServices().subscribe((actionArray) => {
+        this.services = actionArray;
+        this.tarifservices = [];
+        this.services.forEach((service) => {
+          let tarif = 0;
+          //verifier si l'utilisateur a donne un tarif au service actuel "service"
+          this.ingetarifs.forEach((ingetarif) => {
+            if (ingetarif.service_id == service.id) {
+              tarif = ingetarif.tarif;
+            }
+          });
+          //Create un json de service avec l'information sur le tarif fixe par l utilissateur pour
+          // ce service
+          this.tarifservices.push({
+            service_id: service.id,
+            service_name: service.title,
+            tarif: tarif,
+          });
+        });
+      });
+    });
+  }
+
+  getValue(evt, service_id) {
+    //Recupere la valeur tapee par l utilisateur
+    const tarif = evt.srcElement.value;
+    //Mettre a jour le tarif dans pour le service auquel l'utilisateur aimerait
+    //Changer de valeur
+    this.tarifservices.forEach((tarifservice) => {
+      if (tarifservice.service_id == service_id) {
+        tarifservice.tarif = tarif;
+      }
+    });
+    console.log(this.tarifservices);
+  }
+
+  //Deplacer le marker sur le map
+  markerDragEnd($event: any) {
+    console.log($event);
+    this.latitude = $event.coords.lat;
+    this.longitude = $event.coords.lng;
+    this.getAddress(this.latitude, this.longitude);
+  }
+
+  //Recuperer l'adresse enfonction de latitude et longitude
+  getAddress(latitude, longitude) {
+    this.geoCoder.geocode(
+      { location: { lat: latitude, lng: longitude } },
+      (results, status) => {
+        console.log(results);
+        console.log(status);
+        if (status === 'OK') {
+          if (results[0]) {
+            this.zoom = 12;
+            this.address = results[0].formatted_address;
+          } else {
+            window.alert('No results found');
+          }
+        } else {
+          window.alert('Geocoder failed due to: ' + status);
+        }
+      }
+    );
+  }
+  async ionViewWillEnter() {
+    this.userDetail = this.userService.getUserProfile();
+  }
+
+  //mettre a jour les donnees sur le profile
   async updateProfile() {
     if (!this.updateForm.valid) {
       console.log('no valid');
@@ -78,6 +233,7 @@ export class FireProfilePage implements OnInit {
       // console.log("itemId="+this.itemId);
       // add to firebase
       this.ionicComponentService.presentLoading();
+      let adresse = this.updateForm.value.adresse;
 
       console.log('YES');
       await this.userService
@@ -85,7 +241,13 @@ export class FireProfilePage implements OnInit {
           this.updateForm.value.firstname,
           this.updateForm.value.lastname,
           this.updateForm.value.phone,
-          this.updateForm.value.email
+          this.updateForm.value.email,
+          this.address,
+          this.latitude.toString(),
+          this.longitude.toString(),
+          this.ingeson_id,
+          this.updateForm.value.about,
+          this.tarifservices
         )
         .then(
           () => {
@@ -103,34 +265,5 @@ export class FireProfilePage implements OnInit {
       //this.firestore.doc('item/'+this.itemId).update(postData);
       //this.router.navigateByUrl('crud-item');
     }
-  }
-  async logout() {
-    //  this.userService.signoutUser();
-    //  this.router.navigateByUrl('/side-menu/travel/tabs/tab1');
-    await this.userService.signoutUser().then(
-      () => {
-        console.log('LOGOUT');
-        this.ionicComponentService.presentTimeoutLoading(1000, true);
-        this.ionicComponentService.presentToastWithOptions(
-          'Notification',
-          'notifications-outline',
-          '',
-          'Vous êtes déconnecté',
-          'top',
-          9000
-        );
-        //this.ionicComponentService.presentToast("Logout",1000);
-        this.router.navigateByUrl('fire-signin');
-        //loadingPopup.dismiss();
-        //this.nav.setRoot('AfterLoginPage');
-      },
-      (error) => {
-        var errorMessage: string = error.message;
-        this.ionicComponentService.presentToast(errorMessage, 3000);
-        console.log('ERROR:' + errorMessage);
-        //loadingPopup.dismiss();
-        //this.presentAlert(errorMessage);
-      }
-    );
   }
 }

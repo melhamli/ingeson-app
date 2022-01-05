@@ -1,0 +1,63 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>map-home</ion-title>
+  </ion-toolbar>
+  <ion-button color="dark" (click)="close()">
+    <ion-icon size="large" name="close-circle"></ion-icon>
+  </ion-button>
+</ion-header>
+ -->
+
+<ion-content fullscreen="true">
+  <!-- fab placed to the top end -->
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button
+      mode="ios"
+      size="small"
+      translucent="true"
+      (click)="close()"
+    >
+      <ion-icon name="close-circle-outline" color="lightgray"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!--*********** Map wrapper  ***********-->
+
+  <div id="wrapper">
+    <!--*********** Map  ***********x-->
+    <div #map id="map"></div>
+
+    <!--*********** Detail box ***********-->
+    <div *ngIf="viewDetail" class="place-detail effect6">
+      <ion-card
+        class="place-detail-card"
+        (click)="openDetail('/detail',userprofileId)"
+      >
+        <div
+          class="place-detail-card-bg"
+          [ngStyle]="{'background-image': 'url(' + ingesonImage+ ')'}"
+        >
+          <div class="place-detail-card-title">
+            <ion-item lines="none">
+              <ion-label>
+                <h2 class="main-b-header6">{{ingesonName}}</h2>
+                <ion-text color="light">
+                  <p>{{ingesonAdresse}}</p>
+                </ion-text>
+                <p>
+                  <ion-icon
+                    style="font-size: 14px !important"
+                    color="yellow"
+                    *ngFor="let i of [0,1,2,3,4]"
+                    [name]="i < ingesonRating? 'star' : 'star-outline'"
+                  >
+                  </ion-icon>
+                </p>
+              </ion-label>
+            </ion-item>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

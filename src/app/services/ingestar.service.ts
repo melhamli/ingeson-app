@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/firestore';
 // import * as firebase from 'firebase';
 // import { Observable } from 'rxjs';
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, combineLatest, of, Subscription } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { uniq, flatten } from 'lodash';
 
@@ -18,6 +18,7 @@ export class IngestarService {
   userId: string = '';
   userAuth: boolean = false;
   private userProfile: AngularFirestoreDocument<any>;
+  subscription: Subscription;
 
   constructor(
     private firestore: AngularFirestore,
@@ -114,6 +115,8 @@ export class IngestarService {
   }
   //Recuperer les infos sur le profile de l'ingenieur du son associe a l'utilisateur
   getIngeson(userProfileId: string) {
+    //console.log('==========getIngeson');
+    //console.log(userProfileId);
     return this.firestore
       .collection<any>('/ingeson', (ref) =>
         ref.where('userprofile_id', '==', userProfileId)
@@ -167,28 +170,6 @@ export class IngestarService {
         })
       );
   }
-  //Sauvegarder une reservation
-  signupUser(
-    firstname: string,
-    lastname: string,
-    phone: string,
-    username: string,
-    password: string
-  ): Promise<any> {
-    return this.fireAuth.auth
-      .createUserWithEmailAndPassword(username, password)
-      .then((newUser) => {
-        console.log('userid=========' + newUser.user.uid); // firebase.database().ref('/userProfile').child(newUser.uid).set({
-        this.firestore.collection('userProfile').doc(newUser.user.uid).set({
-          id: newUser.user.uid,
-          firstname: firstname,
-          lastname: lastname,
-          email: username,
-          image: '',
-          phone: phone,
-        });
-      });
-  }
 
   saveReservation(
     userprofile_id: string,
@@ -200,6 +181,7 @@ export class IngestarService {
     nbheure: number,
     date_res: string,
     service_id: string,
+    service_name: string,
     service_tarif: string,
     total_amount: number
   ) {
@@ -213,8 +195,121 @@ export class IngestarService {
       nbheure: nbheure,
       date_res: date_res,
       service_id: service_id,
+      service_name: service_name,
       service_tarif: service_tarif,
       total_amount: total_amount,
     });
+  }
+
+  getDemandeReservations(userProfileId: string) {
+    console.log('getDemandeReservations');
+    return this.firestore
+      .collection<any>('/reservation', (ref) =>
+        ref.where('userprofile_id', '==', userProfileId)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  getPrestationReservations(userProfileId: string) {
+    console.log('getPrestationReservations');
+    return this.firestore
+      .collection<any>('/reservation', (ref) =>
+        ref.where('ingeson_id', '==', userProfileId)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  getReview(user_from: string, user_to: string): any {
+    console.log('get reviews to remove');
+    return this.firestore
+      .collection<any>('review', (ref) =>
+        ref.where('user_to', '==', user_to).where('user_from', '==', user_from)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data = a.payload.doc.data();
+            // get id from firebase metadata
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  removeReview(user_from: string, user_to: string) {
+    return new Promise((resolve, reject) => {
+      this.subscription = this.getReview(user_from, user_to).subscribe(
+        (reviews) => {
+          console.log('Inside reviews');
+          console.log(reviews);
+          if (reviews && reviews.length > 0) {
+            reviews.forEach(async (review) => {
+              await this.firestore.doc('review/' + review.id).delete();
+            });
+            console.log('remove response');
+          }
+          resolve(true);
+        }
+      );
+    });
+  }
+
+  async addReview(
+    user_from: string,
+    user_from_name: string,
+    user_from_image: string,
+    user_to: string,
+    note: number,
+    message: string,
+    avg_note: number,
+    ingeson_id: string
+  ): Promise<any> {
+    //Supprimer le review si cela existe deja
+    let removeRep = false;
+    await this.removeReview(user_from, user_to).then((rep) => {
+      this.subscription.unsubscribe();
+      removeRep = true;
+    });
+
+    if (removeRep) {
+      return this.firestore
+        .collection('ingeson')
+        .doc(ingeson_id)
+        .update({
+          avg_note: avg_note,
+        })
+        .then((res) => {
+          console.log('update avg_note');
+          console.log(res);
+          this.firestore.collection<any>('review').add({
+            user_from: user_from,
+            user_from_name: user_from_name,
+            user_from_image: user_from_image,
+            user_to: user_to,
+            note: note,
+            message: message,
+          });
+        });
+    }
   }
 }

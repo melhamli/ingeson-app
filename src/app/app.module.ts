@@ -26,25 +26,17 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 //******* firebase storage ********//
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
-
-
-
 //******** UI_components / modal detail *********/
 import { ModalContentPageModule } from './ui-components/modal-content/modal-content.module';
 
 //******** UI_components / modal detail *********/
 import { MapDetailPageModule } from './ui-layouts/map/map-detail/map-detail.module';
 
-
-
 //******* Travel page module ********//
 import { TravelMapPageModule } from './ui-layouts/travel/travel-map/travel-map.module';
 // import { TravelMapModalPageModule } from './app-travel/travel-map-modal/travel-map-modal.module';
 import { TravelSearchPageModule } from './ui-layouts/travel/travel-search/travel-search.module';
 // import { TravelPlaceReviewAddPageModule } from './app-travel/travel-place-review-add/travel-place-review-add.module';
-
-
-
 
 import { TravelImageViewPageModule } from './ui-layouts/travel/travel-image-view/travel-image-view.module';
 
@@ -55,66 +47,64 @@ import { FoodAddressEditPageModule } from './ui-layouts/food/food-address-edit/f
 // //import image gallery page module
 // //import { ImageModalPageModule } from './image-modal/image-modal.module';
 
-
 //******* Shopping page module ********//
-import { ShoppingSearchPageModule } from './ui-layouts/shopping/shopping-search/shopping-search.module'
+import { ShoppingSearchPageModule } from './ui-layouts/shopping/shopping-search/shopping-search.module';
 import { ShoppingAddressAddPageModule } from './ui-layouts/shopping/shopping-address-add/shopping-address-add.module';
 import { ShoppingAddressEditPageModule } from './ui-layouts/shopping/shopping-address-edit/shopping-address-edit.module';
-import { ShoppingSpecialPageModule } from './ui-layouts/shopping/shopping-special/shopping-special.module'
+import { ShoppingSpecialPageModule } from './ui-layouts/shopping/shopping-special/shopping-special.module';
 
 //******* Real estate page module ********//
-import { RealSearchPageModule } from './ui-layouts/realestate/real-search/real-search.module'
-import { RealMapPageModule } from './ui-layouts/realestate/real-map/real-map.module'
-
+import { RealSearchPageModule } from './ui-layouts/realestate/real-search/real-search.module';
+import { RealMapPageModule } from './ui-layouts/realestate/real-map/real-map.module';
 
 // //******* Radio station page module ********//
 import { RadioPlayerPageModule } from './ui-layouts/radio-station/radio-player/radio-player.module';
 
-
 // //******* UI-layout / gallery viewer ********//
 import { ImageGalleryViewPageModule } from './ui-layouts/image-gallery-view/image-gallery-view.module';
-
 
 // //******** UI_components / modal detail *********/
 // import { ModalDetailPageModule } from './ui-components/modal-detail/modal-detail.module';
 
-
 // //******** ionic4 rating *********/
 import { IonicRatingModule } from 'ionic4-rating/dist';
 
-
 // //******** Shared module *********/
-import { SharedModule} from './shared/shared.module';
-
-
+import { SharedModule } from './shared/shared.module';
 
 import { AppRoutingModule } from './app-routing.module';
+//******* Ingestar page module ********//
+import { SearchPageModule } from './ingestar/search/search.module';
+import { MapPageModule } from './ingestar/map/map.module';
 
-
+// geolocation and native-geocoder
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     IonicRatingModule, // Put ionic-rating module here
     SharedModule,
     HttpClientModule,
     IonicModule.forRoot({
       rippleEffect: false,
-      mode: 'ios'
+      mode: 'ios',
     }),
     IonicStorageModule.forRoot(),
 
-
     AppRoutingModule,
+    SearchPageModule,
+    MapPageModule,
 
     //******* Travel page module ********//
     TravelImageViewPageModule,
     TravelMapPageModule,
-  //   TravelMapModalPageModule,
+    //   TravelMapModalPageModule,
     TravelSearchPageModule,
-  //   TravelPlaceReviewAddPageModule,
+    //   TravelPlaceReviewAddPageModule,
 
     //******* Food page module ********//
     FoodSearchPageModule,
@@ -149,17 +139,17 @@ import { AppRoutingModule } from './app-routing.module';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-
-
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    Geolocation,
+    NativeGeocoder,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  
-  bootstrap: [AppComponent]
+
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

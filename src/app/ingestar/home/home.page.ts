@@ -6,6 +6,8 @@ import { Observable, Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { IngestarService } from '../../services/ingestar.service';
 //import { HideHeaderConfig } from '../../shared/hide-header.directive';
+import { SearchPage } from '../search/search.page';
+import { MapPage } from '../map/map.page';
 
 @Component({
   selector: 'app-home',
@@ -74,10 +76,6 @@ export class HomePage implements OnInit {
   toggleSideMenu() {
     this.ionicComponentService.sideMenu(); //Add this method to your button click function
   }
-  openSearchPage() {
-    console.log('Search bar');
-    this.router.navigateByUrl('/travel-search');
-  }
   ngOnDestroy() {
     // no need to destroy subscription
   }
@@ -87,5 +85,20 @@ export class HomePage implements OnInit {
   }
   openIngeSonDetail(url, userprofileId) {
     this.router.navigateByUrl('/' + url + '/' + userprofileId);
+  }
+
+  async openSearchModal() {
+    console.log('openSearchModal');
+    const modal = await this.modalController.create({
+      component: SearchPage,
+    });
+    return await modal.present();
+  }
+  async openMap() {
+    console.log('openModal');
+    const modal = await this.modalController.create({
+      component: MapPage,
+    });
+    return await modal.present();
   }
 }

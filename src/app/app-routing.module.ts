@@ -42,6 +42,17 @@ const routes: Routes = [
   },
 
   {
+    path: 'search',
+    loadChildren: () =>
+      import('./ingestar/search/search.module').then((m) => m.SearchPageModule),
+  },
+  {
+    path: 'map',
+    loadChildren: () =>
+      import('./ingestar/map/map.module').then((m) => m.MapPageModule),
+  },
+
+  {
     // sidemenu with tabs
     path: 'sidemenu',
     loadChildren: () =>
@@ -363,14 +374,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./ui-layouts/masonry/masonry.module').then(
         (m) => m.MasonryPageModule
-      ),
-  },
-
-  {
-    path: 'search',
-    loadChildren: () =>
-      import('./ui-layouts/search/search.module').then(
-        (m) => m.SearchPageModule
       ),
   },
 
@@ -880,20 +883,6 @@ const routes: Routes = [
       import('./firebase-auth/fire-forgot/fire-forgot.module').then(
         (m) => m.FireForgotPageModule
       ),
-  },
-  {
-    path: 'list',
-    loadChildren: () =>
-      import('./ingestar/list/list.module').then((m) => m.ListPageModule),
-  },
-  {
-    path: 'detail',
-    loadChildren: () =>
-      import('./ingestar/detail/detail.module').then((m) => m.DetailPageModule),
-  },
-  {
-    path: 'reservation-list',
-    loadChildren: () => import('./ingestar/reservation-list/reservation-list.module').then( m => m.ReservationListPageModule)
   },
 ];
 

@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/firestore';
 // import * as firebase from 'firebase';
 // import { Observable } from 'rxjs';
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, combineLatest, of, Subscription } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { uniq, flatten } from 'lodash';
 
@@ -18,6 +18,7 @@ export class UserService {
   userId: string = '';
   userAuth: boolean = false;
   private userProfile: AngularFirestoreDocument<any>;
+  subscription: Subscription;
 
   constructor(
     private firestore: AngularFirestore,
@@ -193,7 +194,8 @@ export class UserService {
     lastname: string,
     phone: string,
     username: string,
-    password: string
+    password: string,
+    is_ingeson: boolean
   ): Promise<any> {
     return this.fireAuth.auth
       .createUserWithEmailAndPassword(username, password)
@@ -206,6 +208,7 @@ export class UserService {
           email: username,
           image: '',
           phone: phone,
+          is_ingeson: is_ingeson,
         });
       });
   }
@@ -247,13 +250,97 @@ export class UserService {
     firstname: string,
     lastname: string,
     phone: string,
-    email: string
+    email: string,
+    adresse: string,
+    latitude: string,
+    longitude: string,
+    ingeson_id: string,
+    about: string,
+    tarifservices: any[]
   ) {
-    return this.firestore.doc<any>('userProfile/' + this.userId).update({
-      firstname: firstname,
-      lastname: lastname,
-      phone: phone,
-      email: email,
+    //1-Enregistrer les champs correspondant a userprofile
+    //2-Enregister les champs correspondants a ingeson
+    //3-Supprimer les anciens tarifs fixes par l uilissateur
+    //4-Add les nouveaux  tarifs fixes par l uilissateur
+    return this.firestore
+      .doc<any>('userProfile/' + this.userId)
+      .update({
+        firstname: firstname,
+        lastname: lastname,
+        phone: phone,
+        email: email,
+      })
+      .then((res) => {
+        //2-
+        this.firestore
+          .collection('ingeson')
+          .doc(ingeson_id)
+          .update({
+            latitude: latitude,
+            longitude: longitude,
+            adresse: adresse,
+            about: about,
+          })
+          .then(async (res) => {
+            //3-
+            let removeRep = false;
+            //Attendre que la suppression soit finie avant de passer a l ajout
+            await this.removeTarifs(this.userId).then((rep) => {
+              this.subscription.unsubscribe();
+              removeRep = true;
+            });
+            if (removeRep) {
+              //4-
+              tarifservices.forEach((tarifservice) => {
+                if (parseInt(tarifservice.tarif) != 0) {
+                  this.firestore.collection<any>('ingetarif').add({
+                    service_id: tarifservice.service_id,
+                    service_name: tarifservice.service_name,
+                    tarif: tarifservice.tarif,
+                    userprofile_id: this.userId,
+                  });
+                }
+              });
+            }
+          });
+      });
+  }
+
+  //Recuperer tous les anciens tarifs de l'utilisateur
+  getTarifs(userprofile_id: string): any {
+    console.log('get tarifs to remove');
+    return this.firestore
+      .collection<any>('ingetarif', (ref) =>
+        ref.where('userprofile_id', '==', userprofile_id)
+      )
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data = a.payload.doc.data();
+            // get id from firebase metadata
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+  }
+
+  //supprimer tous les tarifs pour un utilisateur
+  removeTarifs(userprofile_id: string) {
+    return new Promise((resolve, reject) => {
+      this.subscription = this.getTarifs(userprofile_id).subscribe((tarifs) => {
+        console.log('Inside remove tarifs');
+        console.log(tarifs);
+        if (tarifs && tarifs.length > 0) {
+          //Supprimer les tarifs un a un
+          tarifs.forEach(async (tarif) => {
+            await this.firestore.doc('ingetarif/' + tarif.id).delete();
+          });
+          console.log('remove response');
+        }
+        resolve(true);
+      });
     });
   }
 

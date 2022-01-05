@@ -48,6 +48,7 @@ export class FireSignupPage implements OnInit {
     // https://stackoverflow.com/questions/53130244/cant-bind-to-formgroup-in-angular-7
 
     this.registerForm = formBuilder.group({
+      is_ingeson: ['client', Validators.compose([Validators.required])],
       firstname: [
         '',
         Validators.compose([Validators.minLength(3), Validators.required]),
@@ -82,6 +83,7 @@ export class FireSignupPage implements OnInit {
     console.log('redirectUrl=' + this.redirectUrl);
   }
   submitFormTest() {
+    console.log(this.registerForm.value);
     if (!this.registerForm.valid) {
       console.log(this.registerForm.value);
       //this.presentAlert("invalid form");
@@ -95,6 +97,7 @@ export class FireSignupPage implements OnInit {
   /// old way ////
   async registerUser() {
     console.log('call signopUser');
+    console.log(this.registerForm.value);
     if (!this.registerForm.valid) {
       console.log(this.registerForm.value);
       console.log('invalid form');
@@ -103,13 +106,19 @@ export class FireSignupPage implements OnInit {
       this.ionicComponentService.presentLoading();
       console.log(this.registerForm.value);
       console.log('yes, ');
+      let is_ingeson = this.registerForm.value.is_ingeson;
+      let bool_is_ingeson = false;
+      if (is_ingeson == 'ingeson') {
+        bool_is_ingeson = true;
+      }
       await this.userService
         .signupUser(
           this.registerForm.value.firstname,
           this.registerForm.value.lastname,
           this.registerForm.value.phone,
           this.registerForm.value.username,
-          this.registerForm.value.password
+          this.registerForm.value.password,
+          bool_is_ingeson
         )
         .then(
           () => {

@@ -66,31 +66,60 @@
     </div>
 
     <div *ngIf="ingereviews">
-      <!--*********** Contact ***********-->
-      <ion-item lines="none">
-        <h1 class="main-header5">Reviews</h1>
-      </ion-item>
-      <ion-item
-        *ngFor="let review of ingereviews"
-        lines="none"
-        style="padding: 0px !important"
-        href="javascript:void(0);"
-      >
-        <ion-avatar slot="start">
-          <img [src]="review.user_from_image" />
-        </ion-avatar>
-        <ion-label>
-          <!-- <h3 class="main-header6">{{(itemDetail | async)?.agentId}}</h3> -->
-          <h3 class="main-header6">{{review.user_from_name}}</h3>
-          <h3 class="main-header6">{{review.message}}</h3>
-          <ion-icon
-            style="font-size: 16px !important"
-            color="warning"
-            *ngFor="let i of [0,1,2,3,4]"
-            [name]="i < review.note  ? 'star' : 'star-outline'"
-          ></ion-icon>
-        </ion-label>
-      </ion-item>
+      <!--*********** Reviews ***********-->
+      <ion-list>
+        <ion-list-header> Reviews </ion-list-header>
+        <ion-item *ngFor="let review of ingereviews">
+          <ion-avatar slot="start">
+            <img [src]="review.user_from_image" />
+          </ion-avatar>
+          <ion-label>
+            <h2>{{review.user_from_name}}</h2>
+            <h3>{{review.message}}</h3>
+            <ion-icon
+              style="font-size: 16px !important"
+              color="warning"
+              *ngFor="let i of [0,1,2,3,4]"
+              [name]="i < review.note  ? 'star' : 'star-outline'"
+            ></ion-icon>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-list-header> Add Review </ion-list-header>
+    </div>
+
+    <div class="review-form">
+      <form [formGroup]="reviewForm" novalidate>
+        <ion-list class="ion-margin-top ion-padding">
+          <!-- ############ -->
+          <ion-item>
+            <ion-label position="stacked">Note</ion-label>
+            <rating
+              formControlName="note"
+              readonly="false"
+              size="default"
+              resettable="true"
+            >
+            </rating>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <ion-label position="stacked">Message</ion-label>
+            </ion-label>
+            <ion-textarea formControlName="message"></ion-textarea>
+          </ion-item>
+
+          <ion-button
+            mode="ios"
+            color="dark"
+            expand="block"
+            class="ion-margin-top"
+            (click)="soumettreReview()"
+          >
+            Soumettre
+          </ion-button>
+        </ion-list>
+      </form>
     </div>
 
     <ion-footer class="ion-no-border">

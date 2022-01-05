@@ -101,6 +101,7 @@ export class ReservationPage implements OnInit {
       let service = this.reservationForm.value.service;
       let serviceDetails = service.split('_');
       let service_id = serviceDetails[0];
+      let service_name = serviceDetails[2];
       let service_tarif = serviceDetails[1];
       let total_amount = this.grandTotal;
       await this.ingestarService
@@ -114,6 +115,7 @@ export class ReservationPage implements OnInit {
           nbheure,
           date_res,
           service_id,
+          service_name,
           service_tarif,
           total_amount
         )

@@ -1,42 +1,47 @@
 <ion-app>
-
-
-  
   <ion-split-pane contentId="main-content" when="(min-width: 3000px)">
-
-
-    <ion-menu contentId="main-content" >
+    <ion-menu contentId="main-content">
       <ion-content>
         <!-- ########################### -->
-
-
-
-
 
         <!-- ############################ -->
 
         <ion-list id="inbox-list">
           <ion-list-header>INGE STAR</ion-list-header>
         </ion-list>
-    
 
         <ion-list class="padding-left-10" lines="none">
           <!-- <ion-list-header>
             UI layout with firebase
           </ion-list-header> -->
-         
 
-          <ion-menu-toggle autoHide="false" *ngFor="let p of layoutPages; let i = index">
-            <ion-item lines="none" [routerLink]="p.url" routerLinkActive="selected" routerDirection="root" detail="false">
+          <ion-menu-toggle
+            autoHide="false"
+            *ngFor="let p of layoutPages; let i = index"
+          >
+            <ion-item
+              lines="none"
+              [routerLink]="p.url"
+              routerLinkActive="selected"
+              routerDirection="root"
+              detail="false"
+            >
               <ion-icon slot="start" [name]="p.icon + '-outline'"></ion-icon>
               <ion-label>
-                {{p.title}}
+                {{ p.title }}
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
-
+          <ion-item
+            lines="none"
+            (click)="logout()"
+            detail="false"
+            *ngIf="loggedIn"
+          >
+            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-label>Se deconnecter</ion-label>
+          </ion-item>
         </ion-list>
-
 
         <!--<ion-list lines="none">
           <ion-note> Firebase Authentication</ion-note>
@@ -65,9 +70,6 @@
         </ion-list>
       -->
 
-
-
-
         <!--<ion-list lines="none">
           <ion-note>UI Components</ion-note>
           <ion-list class="home-list" lines="none">
@@ -93,17 +95,6 @@
 
         </ion-list> 
       -->
-
-
-
-
-
-
-
-
-
-
-
       </ion-content>
 
       <!-- <ion-footer>
@@ -118,18 +109,8 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-footer> -->
-      
-
     </ion-menu>
 
-
-
-
-
-
-
     <ion-router-outlet id="main-content"></ion-router-outlet>
-
   </ion-split-pane>
-
 </ion-app>
