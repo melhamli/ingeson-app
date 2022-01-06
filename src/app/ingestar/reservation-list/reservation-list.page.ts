@@ -33,16 +33,18 @@ export class ReservationListPage implements OnInit {
     this.getDemandeReservations();
     this.getPrestationReservations();
   }
-
+  //Recupere les demandes de reservation faites par l utilisateur
   getDemandeReservations() {
     let userprofileId = this.userService.getUserId();
     this.ingestarService
       .getDemandeReservations(userprofileId)
       .subscribe((result) => {
+        console.log('reservations========');
         this.demandes = result;
       });
   }
-
+  //Recupere les demandes de prestations que
+  //l'utilisateur ingeson doit honorer
   getPrestationReservations() {
     let userprofileId = this.userService.getUserId();
     this.ingestarService

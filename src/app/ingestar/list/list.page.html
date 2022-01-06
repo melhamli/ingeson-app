@@ -28,7 +28,6 @@
         <ion-card
           mode="ios"
           class="food-main-card food-card-tall ion-margin-bottom shadow"
-          routerLink="/detail/{{ingetarif.userProfile.id}}"
           (click)="openIngeSonDetail('detail',ingetarif.userProfile.id)"
         >
           <div
@@ -38,8 +37,11 @@
           <ion-card-content class="card1-padding">
             <ion-label
               ><ion-text color="black"
-                ><h2>{{ingetarif.userProfile.firstname}}</h2></ion-text
-              ></ion-label
+                ><h2>
+                  {{ingetarif.userProfile.firstname}}
+                  <small>({{ingetarif.tarif}} {{unit}})</small>
+                </h2>
+              </ion-text></ion-label
             >
             <ion-label><h3>{{ingetarif.ingeson.adresse}}</h3></ion-label>
             <ion-row>
@@ -49,7 +51,8 @@
                   color="warning"
                   *ngFor="let i of [0,1,2,3,4]"
                   [name]="i < ingetarif.ingeson.avg_note  ? 'star' : 'star-outline'"
-                ></ion-icon
+                >
+                </ion-icon
                 ><br />
               </ion-col>
             </ion-row>

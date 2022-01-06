@@ -54,17 +54,16 @@ export class FireProfilePage implements OnInit {
   // Image specifications
   imgName: string;
   imgPath: string;
-  // File uploading status
-  isFileUploading: boolean;
-  isFileUploaded: boolean;
+  fileStoragePath: string;
+
   ////Fin image
 
-  latitude: number;
-  longitude: number;
+  latitude: number = 0.0;
+  longitude: number = 0.0;
   zoom: number;
   address: string;
   private geoCoder;
-  ingeson_id: string;
+  ingeson_id: string = '';
   public services: any[];
   public ingetarifs: any[];
   public tarifservices: any[] = [];
@@ -111,18 +110,13 @@ export class FireProfilePage implements OnInit {
         '',
         Validators.compose([Validators.minLength(0), Validators.required]),
       ],
-      about: [
-        '',
-        Validators.compose([Validators.minLength(3), Validators.required]),
-      ],
+      about: [''],
     });
-    this.isFileUploading = false;
-    this.isFileUploaded = false;
   }
 
   ngOnInit() {
     //this.ionicComponentService.presentLoading(); // call loading
-
+    this.userDetail = this.userService.getUserProfile();
     //this.getServices();
     this.userService.getUserProfile().subscribe((res) => {
       let userProfileId = res.id;
@@ -266,12 +260,15 @@ export class FireProfilePage implements OnInit {
       }
     );
   }
-  async ionViewWillEnter() {
+  /*async ionViewWillEnter() {
     this.userDetail = this.userService.getUserProfile();
-  }
+    this.userService.getUserProfile().subscribe((res) => {
+      console.log('Get user profile response=' + res);
+    });
+  }*/
 
   //Telecharger l'image et sauvegarder l'image dans firebase storage
-  /*uploadImage(event: FileList) {
+  uploadImage(event: FileList) {
     const file = event.item(0);
 
     // Image validation
@@ -280,44 +277,21 @@ export class FireProfilePage implements OnInit {
       return;
     }
 
-    this.isFileUploading = true;
-    this.isFileUploaded = false;
-
     this.imgName = file.name;
-    console.log(this.imgName);
 
     // Storage path
-    const fileStoragePath = `filesStorage/${new Date().getTime()}_${file.name}`;
-    console.log(fileStoragePath);
+    this.fileStoragePath = `filesStorage/${new Date().getTime()}_${file.name}`;
 
     // Image reference
-    const imageRef = this.afStorage.ref(fileStoragePath);
+    const imageRef = this.afStorage.ref(this.fileStoragePath);
     console.log(imageRef);
 
     // File upload task
-    this.fileUploadTask = this.afStorage.upload(fileStoragePath, file);
+    this.fileUploadTask = this.afStorage.upload(this.fileStoragePath, file);
 
     // Show uploading progress
     this.percentageVal = this.fileUploadTask.percentageChanges();
-    this.fileUploadTask.then((rep) => {
-      console.log('uploadddddddddddddd');
-      console.log(rep);
-    });
-    // Retreive uploaded image storage path
-    this.UploadedImageURL = imageRef.getDownloadURL();
-    imageRef.getDownloadURL().subscribe(
-      (resp) => {
-        this.imgPath = resp;
-        console.log('=================');
-        console.log(this.imgPath);
-        this.isFileUploading = false;
-        this.isFileUploaded = true;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }*/
+  }
 
   //mettre a jour les donnees sur le profile
   async updateProfile() {
@@ -331,31 +305,47 @@ export class FireProfilePage implements OnInit {
       this.ionicComponentService.presentLoading();
       let adresse = this.updateForm.value.adresse;
 
-      await this.userService
-        .updateUserProfile(
-          this.updateForm.value.firstname,
-          this.updateForm.value.lastname,
-          this.updateForm.value.phone,
-          this.updateForm.value.email,
-          this.address,
-          this.latitude.toString(),
-          this.longitude.toString(),
-          this.ingeson_id,
-          this.updateForm.value.about,
-          this.tarifservices,
-          ""
-        )
-        .then(
-          () => {
-            this.ionicComponentService.presentToast('Profil mis à jour', 2000);
-            this.ionicComponentService.dismissLoading();
-          },
-          (error) => {
-            var errorMessage: string = error.message;
-            this.ionicComponentService.dismissLoading();
-            this.ionicComponentService.presentAlert(errorMessage);
-          }
-        );
+      if (this.fileStoragePath && this.fileStoragePath != '') {
+        // recuperer le lien de l'image
+        this.afStorage
+          .ref(this.fileStoragePath)
+          .getDownloadURL()
+          .subscribe((url) => {
+            this.imgPath = url;
+            this.updateUserProfile();
+          });
+      } else {
+        this.imgPath = '';
+        this.updateUserProfile();
+      }
     }
+  }
+
+  async updateUserProfile() {
+    await this.userService
+      .updateUserProfile(
+        this.updateForm.value.firstname,
+        this.updateForm.value.lastname,
+        this.updateForm.value.phone,
+        this.updateForm.value.email,
+        this.address,
+        this.latitude.toString(),
+        this.longitude.toString(),
+        this.ingeson_id,
+        this.updateForm.value.about,
+        this.tarifservices,
+        this.imgPath
+      )
+      .then(
+        () => {
+          this.ionicComponentService.presentToast('Profil mis à jour', 2000);
+          this.ionicComponentService.dismissLoading();
+        },
+        (error) => {
+          var errorMessage: string = error.message;
+          this.ionicComponentService.dismissLoading();
+          this.ionicComponentService.presentAlert(errorMessage);
+        }
+      );
   }
 }

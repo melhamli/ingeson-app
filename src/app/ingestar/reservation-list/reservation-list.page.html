@@ -12,7 +12,7 @@
   <ion-item lines="none" class="nomarg" *ngIf="demandes?.length > 0">
     <h1 class="main-header5">Mes reservations demandees</h1>
   </ion-item>
-  <ion-list>
+  <ion-list *ngIf="demandes?.length > 0">
     <ion-item *ngFor="let demande of demandes">
       <ion-avatar slot="start">
         <img [src]="demande.ingeson_image" />
@@ -31,7 +31,7 @@
   <ion-item lines="none" class="nomarg" *ngIf="prestations?.length > 0">
     <h1 class="main-header5">Mes prestations demandees</h1>
   </ion-item>
-  <ion-list>
+  <ion-list *ngIf="prestations?.length > 0">
     <ion-item *ngFor="let prestation of prestations">
       <ion-avatar slot="start">
         <img [src]="prestation.user_profile_image" />
@@ -39,7 +39,8 @@
       <ion-label>
         <h2>{{prestation.user_profile_name}}</h2>
         <h3>
-          Service: {{prestation.service_name}} ({{demande.nbheure}}{{unit_h}})
+          Service: {{prestation.service_name}}
+          ({{prestation.nbheure}}{{unit_h}})
         </h3>
         <h3>Montant: {{prestation.total_amount}} {{currency}}</h3>
       </ion-label>

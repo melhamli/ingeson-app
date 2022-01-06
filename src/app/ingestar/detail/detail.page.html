@@ -6,7 +6,11 @@
   [class.transition]="transition"
 >
   <ion-header class="ion-no-border" slot="fixed">
-    <ion-toolbar class="first" [class.show-background]="showToolbar">
+    <ion-toolbar
+      color="dark"
+      class="first"
+      [class.show-background]="showToolbar"
+    >
       <ion-buttons slot="start">
         <ion-back-button
           mode="ios"
@@ -121,15 +125,15 @@
         </ion-list>
       </form>
     </div>
+  </ion-grid>
+</ion-content>
 
-    <ion-footer class="ion-no-border">
-      <ion-toolbar>
-        <ion-grid fixed class="ion-no-padding">
-          <ion-button color="dark" expand="full" (click)="reserver()"
-            >Reserver</ion-button
-          >
-        </ion-grid>
-      </ion-toolbar>
-    </ion-footer>
-  </ion-grid></ion-content
->
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-grid fixed class="ion-no-padding">
+      <ion-button color="dark" expand="full" (click)="reserver()"
+        >Reserver</ion-button
+      >
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

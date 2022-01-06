@@ -41,7 +41,7 @@ export class AppComponent {
   //Menu pour un utilisateur qui est connecte
   layoutPagesLogged = [
     {
-      title: 'Home',
+      title: 'Accueil',
       url: '/home',
       icon: 'home',
     },

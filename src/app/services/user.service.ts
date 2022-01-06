@@ -291,48 +291,58 @@ export class UserService {
     //2-Enregister les champs correspondants a ingeson
     //3-Supprimer les anciens tarifs fixes par l uilissateur
     //4-Add les nouveaux  tarifs fixes par l uilissateur
+    let profile = {
+      firstname: firstname,
+      lastname: lastname,
+      phone: phone,
+      email: email,
+    };
+    if (image != '') {
+      profile['image'] = image;
+    }
+
     return this.firestore
       .doc<any>('userProfile/' + this.userId)
       .update({
-        firstname: firstname,
-        lastname: lastname,
-        phone: phone,
-        email: email,
-        image: image,
+        ...profile,
       })
       .then((res) => {
-        //2-
-        this.firestore
-          .collection('ingeson')
-          .doc(ingeson_id)
-          .update({
-            latitude: latitude,
-            longitude: longitude,
-            adresse: adresse,
-            about: about,
-          })
-          .then(async (res) => {
-            //3-
-            let removeRep = false;
-            //Attendre que la suppression soit finie avant de passer a l ajout
-            await this.removeTarifs(this.userId).then((rep) => {
-              this.subscription.unsubscribe();
-              removeRep = true;
-            });
-            if (removeRep) {
-              //4-
-              tarifservices.forEach((tarifservice) => {
-                if (parseInt(tarifservice.tarif) != 0) {
-                  this.firestore.collection<any>('ingetarif').add({
-                    service_id: tarifservice.service_id,
-                    service_name: tarifservice.service_name,
-                    tarif: tarifservice.tarif,
-                    userprofile_id: this.userId,
-                  });
-                }
+        //Verifier que l'utilisateur est un ingenieur de son avant de continuer
+        //Les autres mis a jour
+        if (ingeson_id && ingeson_id != '') {
+          //2-
+          this.firestore
+            .collection('ingeson')
+            .doc(ingeson_id)
+            .update({
+              latitude: latitude,
+              longitude: longitude,
+              adresse: adresse,
+              about: about,
+            })
+            .then(async (res) => {
+              //3-
+              let removeRep = false;
+              //Attendre que la suppression soit finie avant de passer a l ajout
+              await this.removeTarifs(this.userId).then((rep) => {
+                this.subscription.unsubscribe();
+                removeRep = true;
               });
-            }
-          });
+              if (removeRep) {
+                //4-
+                tarifservices.forEach((tarifservice) => {
+                  if (parseInt(tarifservice.tarif) != 0) {
+                    this.firestore.collection<any>('ingetarif').add({
+                      service_id: tarifservice.service_id,
+                      service_name: tarifservice.service_name,
+                      tarif: tarifservice.tarif,
+                      userprofile_id: this.userId,
+                    });
+                  }
+                });
+              }
+            });
+        }
       });
   }
 

@@ -14,6 +14,7 @@ export class ListPage implements OnInit {
   public serviceId: any;
   public serviceName: any;
   public ingetarifs: any[];
+  public unit: string = '€/h';
 
   constructor(
     public ingestarService: IngestarService,
