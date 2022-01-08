@@ -1,16 +1,16 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="dark">
+  <ion-toolbar color="black">
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="false" color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title class="main-header4">Reservations</ion-title>
+    <ion-title class="main-header4">Réservations</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content no-padding>
   <!--*********** Mes reservations demandees ***********-->
   <ion-item lines="none" class="nomarg" *ngIf="demandes?.length > 0">
-    <h1 class="main-header5">Mes reservations demandees</h1>
+    <h1 class="main-header5">Mes réservations</h1>
   </ion-item>
   <ion-list *ngIf="demandes?.length > 0">
     <ion-item *ngFor="let demande of demandes">
@@ -20,17 +20,17 @@
       <ion-label>
         <h2>{{demande.ingeson_name}}</h2>
         <h3>
-          Service: {{demande.service_name}} ({{demande.nbheure}}{{unit_h}})
+          Service : {{demande.service_name}} ({{demande.nbheure}}{{unit_h}})
         </h3>
-        <h3>Montant: {{demande.total_amount}} {{currency}}</h3>
-        <h4>Date: {{prestation.date_res | date : 'dd/MM/yyyy'}}</h4>
+        <h3>Montant : {{demande.total_amount}} {{currency}}</h3>
+        <h4>Date : {{demande.date_res | date : "dd/MM/yyyy HH:mm"}}</h4>
       </ion-label>
     </ion-item>
   </ion-list>
 
   <!--*********** Mes prestations ***********-->
   <ion-item lines="none" class="nomarg" *ngIf="prestations?.length > 0">
-    <h1 class="main-header5">Mes prestations demandees</h1>
+    <h1 class="main-header5">Mes prestations</h1>
   </ion-item>
   <ion-list *ngIf="prestations?.length > 0">
     <ion-item *ngFor="let prestation of prestations">
@@ -44,7 +44,7 @@
           ({{prestation.nbheure}}{{unit_h}})
         </h3>
         <h3>Montant: {{prestation.total_amount}} {{currency}}</h3>
-        <h4>Date: {{prestation.date_res | date : 'dd/MM/yyyy'}}</h4>
+        <h4>Date : {{prestation.date_res | date : "dd/MM/yyyy HH:mm"}}</h4>
       </ion-label>
     </ion-item>
   </ion-list>

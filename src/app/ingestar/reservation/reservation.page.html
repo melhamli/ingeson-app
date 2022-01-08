@@ -1,23 +1,23 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="dark">
+  <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-back-button
         mode="ios"
-        color="light"
+        color="black"
         defaultHref="home"
       ></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-menu-button color="light" auto-hide="false"></ion-menu-button>
+      <ion-menu-button color="black" auto-hide="false"></ion-menu-button>
     </ion-buttons>
-    <ion-title color="light" lass="main-header4">Reservation</ion-title>
+    <ion-title color="light" lass="main-header4">Réservation</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-grid fixed class="ion-no-padding">
     <ion-header class="ion-no-border" collapse="condense">
       <ion-toolbar>
-        <ion-title color="dark" size="large">Reservation</ion-title>
+        <ion-title color="black" size="large">Réservation</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -34,7 +34,7 @@
             <ion-select
               formControlName="service"
               *ngIf="ingetarifs"
-              placeholder="Selectionner le service"
+              placeholder="Sélectionner le service"
               (ionChange)="calculateTotal($event)"
             >
               <ion-select-option
@@ -46,12 +46,13 @@
             </ion-select>
           </ion-item>
           <ion-item>
-            <ion-label position="stacked">Date de reservation</ion-label>
+            <ion-label position="stacked">Date de réservation</ion-label>
             <ion-datetime
               formControlName="reservation_date"
-              displayFormat="MM/DD/YYYY"
+              displayFormat="DD/MM/YYYY HH:mm"
+              minuteValues="0,15,30,45"
               min="2021-01-01"
-              max="2023-01-01"
+              max="2030-01-01"
             ></ion-datetime>
           </ion-item>
           <ion-item>
@@ -71,7 +72,7 @@
             <ion-list>
               <ion-item lines="none" class="ion-margin-top">
                 <ion-label class="text-left">
-                  <h1 class="main-b-header8">GrandTotal:</h1>
+                  <h1 class="main-b-header8">Total:</h1>
                 </ion-label>
                 <h1 class="main-b-header8" slot="end" text-right>
                   {{ grandTotal }} {{currency}}
@@ -82,7 +83,7 @@
 
           <ion-card class="checkout-card">
             <ion-item lines="none">
-              <h1 class="main-header5">Payment</h1>
+              <h1 class="main-header5">Paiement</h1>
             </ion-item>
             <ion-radio-group value="cash">
               <div class="ion-padding-top ion-padding-bottom">
@@ -90,16 +91,33 @@
                   <ion-radio
                     slot="start"
                     mode="md"
-                    color="warning"
+                    color="black"
                     value="cash"
                   ></ion-radio>
                   <ion-icon
                     slot="start"
                     size="small"
-                    name="wallet-outline"
+                    name="cash-outline"
                   ></ion-icon>
                   <ion-label>
-                    <h2 class="main-header7">Especes</h2>
+                    <h2 class="main-header7">Espèces</h2>
+                  </ion-label>
+                </ion-item>
+
+                <ion-item lines="none">
+                  <ion-radio
+                    slot="start"
+                    mode="md"
+                    color="black"
+                    value="card"
+                  ></ion-radio>
+                  <ion-icon
+                    slot="start"
+                    size="small"
+                    name="card-outline"
+                  ></ion-icon>
+                  <ion-label>
+                    <h2 class="main-header7">Carte de crédit/Bancontact</h2>
                   </ion-label>
                 </ion-item>
               </div>
@@ -108,7 +126,7 @@
 
           <ion-button
             mode="ios"
-            color="dark"
+            color="black"
             expand="block"
             class="ion-margin-top"
             (click)="soumettreReservation()"
