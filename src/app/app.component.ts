@@ -33,7 +33,7 @@ export class AppComponent {
     },
 
     {
-      title: "S'enregister",
+      title: "S'enregistrer",
       url: 'fire-signup',
       icon: 'person',
     },
@@ -47,13 +47,13 @@ export class AppComponent {
     },
 
     {
-      title: 'Reservations',
+      title: 'Réservations',
       url: '/reservation-list',
       icon: 'mail',
     },
 
     {
-      title: 'Mettre a jour le profil',
+      title: 'Profil',
       url: 'fire-profile',
       icon: 'person',
     },
