@@ -23,6 +23,7 @@
           Service: {{demande.service_name}} ({{demande.nbheure}}{{unit_h}})
         </h3>
         <h3>Montant: {{demande.total_amount}} {{currency}}</h3>
+        <h4>Date: {{prestation.date_res | date : 'dd/MM/yyyy'}}</h4>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -43,6 +44,7 @@
           ({{prestation.nbheure}}{{unit_h}})
         </h3>
         <h3>Montant: {{prestation.total_amount}} {{currency}}</h3>
+        <h4>Date: {{prestation.date_res | date : 'dd/MM/yyyy'}}</h4>
       </ion-label>
     </ion-item>
   </ion-list>
