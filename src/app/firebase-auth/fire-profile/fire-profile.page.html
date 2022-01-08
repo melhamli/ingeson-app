@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="black">
+  <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-back-button
         mode="ios"
@@ -39,17 +39,11 @@
         </div>
         <ion-card class="ion-text-center">
           <ion-card-header>
-            <ion-card-title><h2>Image de profil</h2></ion-card-title>
+            <ion-card-title>Image de profil</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            
-            <ion-button 
-            mode="ios"
-            color="black" 
-            size="medium" 
-            expand="block">
-        
-            <input type="file" (change)="uploadImage($event.target.files)" />
+            <ion-button color="primary" size="medium">
+              <input type="file" (change)="uploadImage($event.target.files)" />
             </ion-button>
           </ion-card-content>
         </ion-card>
@@ -164,13 +158,19 @@
 
         <ion-button
           mode="ios"
-          color="black"
+          color="dark"
           expand="block"
           class="ion-margin-top"
           (click)="updateProfile()"
         >
           Mettre à jour le profil
         </ion-button>
+        <ion-text color="dark">
+          <h2 class="ion-text-center ion-margin-bottom main-header8">
+            En cliquant sur "se déconnecter" vous acceptez les termes et
+            conditions suivantes.
+          </h2>
+        </ion-text>
       </form>
     </div>
   </ion-grid>

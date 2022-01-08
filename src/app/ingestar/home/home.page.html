@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="black">
+  <ion-toolbar color="dark">
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="false"></ion-menu-button>
     </ion-buttons>
@@ -18,7 +18,7 @@
     <ion-searchbar
       class="searchinge"
       color=""
-      placeholder="Rechercher par nom ou adresse"
+      placeholder="Rechercher par nom ou adresse..."
       (click)="openSearchModal()"
       search-icon="search-outline"
     >
@@ -29,7 +29,7 @@
           slot="icon-only"
           size=""
           name="map-outline"
-          color="black"
+          color=""
         ></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -55,7 +55,7 @@
           class="food-card2-bg ion-text-uppercase"
           [ngStyle]="{'background-image': 'url(' + service.image+ ')'}"
         >
-          <h2 class="card2-title"><strong>{{service.title}}</strong></h2>
+          <h2 class="card2-title">{{service.title}}</h2>
         </div>
       </ion-card>
     </ion-slide>
@@ -106,7 +106,7 @@
 
   <!--*********** ingé-sons ***********-->
   <ion-item lines="none" class="nomarg">
-    <h1 class="main-header5">Ingénieurs du son sur INGÉ STAR</h1>
+    <h1 class="main-header5">Ingénieurs du son sur INGE STAR</h1>
   </ion-item>
 
   <!-- liste des ingé-sons  -->

@@ -3,9 +3,7 @@
     <ion-menu contentId="main-content">
       <ion-content>
         <ion-list id="inbox-list">
-         
-          <ion-list-header>INGÉ STAR</ion-list-header>
-
+          <ion-list-header>INGE STAR</ion-list-header>
         </ion-list>
 
         <ion-list class="padding-left-10" lines="none">
@@ -24,7 +22,7 @@
               routerDirection="root"
               detail="false"
             >
-              <ion-icon slot="start" color="light" [name]="p.icon + '-outline'"></ion-icon>
+              <ion-icon slot="start" [name]="p.icon + '-outline'"></ion-icon>
               <ion-label>
                 {{ p.title }}
               </ion-label>
@@ -36,8 +34,8 @@
             detail="false"
             *ngIf="loggedIn"
           >
-            <ion-icon slot="start" color="light" name="log-out-outline"></ion-icon>
-            <ion-label>Se déconnecter</ion-label>
+            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-label>Se deconnecter</ion-label>
           </ion-item>
         </ion-list>
       </ion-content>

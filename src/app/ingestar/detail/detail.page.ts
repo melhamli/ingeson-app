@@ -159,7 +159,7 @@ export class DetailPage implements OnInit {
               'Notification',
               'notifications-outline',
               '',
-              'Review enregistrée avec succès',
+              'Review enregistre avec succes',
               'top',
               9000
             );
